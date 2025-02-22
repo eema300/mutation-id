@@ -1,7 +1,9 @@
 import sys
 
 from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QMessageBox, 
+                            QFileDialog, QHBoxLayout, QPushButton,
+                            QWidget, QFrame, QVBoxLayout)
 from PyQt6.QtGui import QAction
 
 
@@ -9,8 +11,44 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        # main window and layout
         self.setWindowTitle("mutation id")
+        self.setMinimumSize(1150, 650)
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        main_layout = QHBoxLayout()
 
+        # side panel layout
+        side_panel = QFrame()
+        side_panel.setFrameShape(QFrame.Shape.StyledPanel)
+        side_panel.setFixedWidth(250)
+        side_panel_layout = QVBoxLayout()
+
+        load_wt_button = QPushButton("Load Wild Type FASTA")
+        load_mutation_button = QPushButton("Load Mutated Sequence FASTA")
+
+        load_wt_button.clicked.connect(self.open_file)
+        load_mutation_button.clicked.connect(self.open_file)
+
+        side_panel_layout.addWidget(load_wt_button)
+        side_panel_layout.addWidget(load_mutation_button)
+
+        side_panel_layout.addStretch(1)
+        
+        side_panel.setLayout(side_panel_layout)
+        main_layout.addWidget(side_panel)
+
+        # central area layout
+        central_area = QFrame()
+        central_area_layout = QVBoxLayout()
+
+        central_area.setLayout(central_area_layout)
+        main_layout.addWidget(central_area, stretch=1)
+
+        # set main layout
+        central_widget.setLayout(main_layout)
+
+        # menu bar
         menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu("File")
         run_menu = menu_bar.addMenu("Run")
