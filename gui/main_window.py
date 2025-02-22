@@ -13,16 +13,20 @@ class MainWindow(QMainWindow):
 
         menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu("File")
+        run_menu = menu_bar.addMenu("Run")
 
-        open_file_action = QAction("Open File", self)
-        open_file_action.triggered.connect(self.open_file)
+        load_wt_action = QAction("Load WT FASTA", self)
+        load_wt_action.triggered.connect(self.open_file)
 
-        quit_app_action = QAction("Quit", self)
-        quit_app_action.triggered.connect(self.close)
+        load_mutation_action = QAction("Load Mutated FASTA", self)
+        load_mutation_action.triggered.connect(self.open_file)
 
-        file_menu.addAction(open_file_action)
-        file_menu.addSeparator()
-        file_menu.addAction(quit_app_action)
+        alignment_action = QAction("Run Alignment", self)
+        alignment_action.triggered.connect(self.run_alignment)
+
+        file_menu.addAction(load_wt_action)
+        file_menu.addAction(load_mutation_action)
+        run_menu.addAction(alignment_action)
 
     def open_file(self):
         pathname, _ = QFileDialog.getOpenFileName(self, "Open File", "", "FASTA Files (*.fasta)")
@@ -39,6 +43,9 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "File Error", f"An error occured while reading the file {e}")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An unexpected error occured {e}")
+
+    def run_alignment(self):
+        pass
 
 app = QApplication(sys.argv)
 
