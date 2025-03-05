@@ -6,6 +6,8 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QMessageBox,
                             QWidget, QFrame, QVBoxLayout)
 from PyQt6.QtGui import QAction
 
+# from logic import file_loader
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -27,8 +29,8 @@ class MainWindow(QMainWindow):
         load_wt_button = QPushButton("Load Wild Type FASTA")
         load_mutation_button = QPushButton("Load Mutated Sequence FASTA")
 
-        load_wt_button.clicked.connect(self.open_file)
-        load_mutation_button.clicked.connect(self.open_file)
+        load_wt_button.clicked.connect(self.load_fasta_file)
+        load_mutation_button.clicked.connect(self.load_fasta_file)
 
         side_panel_layout.addWidget(load_wt_button)
         side_panel_layout.addWidget(load_mutation_button)
@@ -54,10 +56,10 @@ class MainWindow(QMainWindow):
         run_menu = menu_bar.addMenu("Run")
 
         load_wt_action = QAction("Load WT FASTA", self)
-        load_wt_action.triggered.connect(self.open_file)
+        load_wt_action.triggered.connect(self.load_fasta_file)
 
         load_mutation_action = QAction("Load Mutated FASTA", self)
-        load_mutation_action.triggered.connect(self.open_file)
+        load_mutation_action.triggered.connect(self.load_fasta_file)
 
         alignment_action = QAction("Run Alignment", self)
         alignment_action.triggered.connect(self.run_alignment)
@@ -66,7 +68,7 @@ class MainWindow(QMainWindow):
         file_menu.addAction(load_mutation_action)
         run_menu.addAction(alignment_action)
 
-    def open_file(self):
+    def load_fasta_file(self):
         pathname, _ = QFileDialog.getOpenFileName(self, "Open File", "", "FASTA Files (*.fasta)")
         if not pathname:
             return
