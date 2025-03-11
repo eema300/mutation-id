@@ -6,7 +6,8 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QMessageBox,
                             QWidget, QFrame, QVBoxLayout)
 from PyQt6.QtGui import QAction
 
-# from logic import file_loader
+from logic import (align_sequences, load_fasta_file, read_fasta,
+                   validate_fasta, update_ambiguous_codes)
 
 
 class MainWindow(QMainWindow):
@@ -68,24 +69,24 @@ class MainWindow(QMainWindow):
         file_menu.addAction(load_mutation_action)
         run_menu.addAction(alignment_action)
 
-    def load_fasta_file(self):
-        pathname, _ = QFileDialog.getOpenFileName(self, "Open File", "", "FASTA Files (*.fasta)")
-        if not pathname:
-            return
+    # def load_fasta_file(self):
+    #     pathname, _ = QFileDialog.getOpenFileName(self, "Open File", "", "FASTA Files (*.fasta)")
+    #     if not pathname:
+    #         return
         
-        try:
-            with open(pathname, 'r') as file:
-                sequence = file.read()
+    #     try:
+    #         with open(pathname, 'r') as file:
+    #             sequence = file.read()
 
-        except FileNotFoundError:
-            QMessageBox.critical(self, "File Error", "The selected file could not be found")
-        except IOError as e:
-            QMessageBox.critical(self, "File Error", f"An error occured while reading the file {e}")
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"An unexpected error occured {e}")
+    #     except FileNotFoundError:
+    #         QMessageBox.critical(self, "File Error", "The selected file could not be found")
+    #     except IOError as e:
+    #         QMessageBox.critical(self, "File Error", f"An error occured while reading the file {e}")
+    #     except Exception as e:
+    #         QMessageBox.critical(self, "Error", f"An unexpected error occured {e}")
 
-    def run_alignment(self):
-        pass
+    # def run_alignment(self):
+    #     pass
 
 app = QApplication(sys.argv)
 
