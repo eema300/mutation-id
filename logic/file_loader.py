@@ -1,4 +1,4 @@
-from PyQt6.Widgets import QFileDialog, QMessageBox
+from PyQt6.QtWidgets import QFileDialog, QMessageBox
 import re
 
 
@@ -14,12 +14,12 @@ AMBIGUOUS_BASE_CODES = ['U', 'M', 'R', 'W', 'S', 'Y',
 def load_fasta_file():
     pathname, _ = QFileDialog.getOpenFileName("Open File", "", "FASTA Files (*.fasta)")
     if not pathname:
-        return -1
+        return
     
     try:
         with open(pathname, 'r') as file:
             fasta_file = file.read()
-            return fasta_file
+            return read_fasta(fasta_file)
 
     except FileNotFoundError:
         QMessageBox.critical("File Error", "The selected file could not be found")
@@ -27,8 +27,7 @@ def load_fasta_file():
         QMessageBox.critical("File Error", f"An error occured while reading the file {e}")
     except Exception as e:
         QMessageBox.critical("Error", f"An unexpected error occured {e}")
-    
-    return -1
+
 
 
 # extract header and sequence separately
@@ -39,10 +38,14 @@ def read_fasta(fasta_file):
         header = fasta[0]
         sequence = " ".join(fasta[1:])
 
-        return header, sequence
+        validate_fasta(header, sequence)
+        seqid = header[1:].split(' ')[0]
+        sequence = update_ambiguous_codes(sequence)
+        return list(seqid, sequence)
 
     except IndexError:
         QMessageBox.critical("Error", "File was empty.")
+        return -1
 
 
 '''
@@ -120,6 +123,7 @@ def validate_fasta(header, sequence):
         QMessageBox.critical("Invalid Sequence", "The FASTA sequence is invalid.")
     
     # if no problems, fasta is valid
+    
 
 
 # update ambiguous base codes to be N's

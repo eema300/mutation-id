@@ -1,11 +1,10 @@
-from PyQt6.Widgets import QWidget, QPushButton, QVBoxLayout
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QWidget, QFrame, QVBoxLayout
 
 class SidePanel(QWidget):
     def __init__(self):
         super().__init__()
 
-        side_panel_layout = QVBoxLayout()
-
-    def update_side_panel(self, state):
-        pass
+        self.side_panel = QFrame()
+        self.side_panel.setFrameShape(QFrame.Shape.StyledPanel)
+        self.side_panel.setFixedWidth(250)
+        self.side_panel_layout = QVBoxLayout()

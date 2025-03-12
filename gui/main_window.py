@@ -1,10 +1,18 @@
+# need a state variable that changes every time
+# you add a sequence using the file loader
+# it needs to go from 0 to 1 to 2 and then decrease
+# as such when user deletes a dequence
+
 import sys
 
 from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QMessageBox, 
-                            QFileDialog, QHBoxLayout, QPushButton,
-                            QWidget, QFrame, QVBoxLayout)
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QStackedWidget, 
+                            QHBoxLayout, QPushButton,
+                            QWidget)
 from PyQt6.QtGui import QAction
+
+from side_panel import SidePanel
+from view_area import ViewArea
 
 from logic import (align_sequences, load_fasta_file, read_fasta,
                    validate_fasta, update_ambiguous_codes)
@@ -17,76 +25,48 @@ class MainWindow(QMainWindow):
         # main window and layout
         self.setWindowTitle("mutation id")
         self.setMinimumSize(1150, 650)
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
+        main_widget = QWidget()
+        self.setCentralWidget(main_widget)
         main_layout = QHBoxLayout()
 
-        # side panel layout
-        side_panel = QFrame()
-        side_panel.setFrameShape(QFrame.Shape.StyledPanel)
-        side_panel.setFixedWidth(250)
-        side_panel_layout = QVBoxLayout()
-
+        # side panel
+        self.side_panel = SidePanel()
         load_wt_button = QPushButton("Load Wild Type FASTA")
         load_mutation_button = QPushButton("Load Mutated Sequence FASTA")
+        load_wt_button.clicked.connect(load_fasta_file)
+        load_mutation_button.clicked.connect(load_fasta_file)
+        self.side_panel.side_panel_layout.addWidget(load_wt_button)
+        self.side_panel.side_panel_layout.addWidget(load_mutation_button)
+        self.side_panel.side_panel_layout.addStretch(1)
+        self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
-        load_wt_button.clicked.connect(self.load_fasta_file)
-        load_mutation_button.clicked.connect(self.load_fasta_file)
+        # view area
+        view_area = ViewArea()
+        view_area.setLayout(view_area.view_area_layout)
 
-        side_panel_layout.addWidget(load_wt_button)
-        side_panel_layout.addWidget(load_mutation_button)
-
-        side_panel_layout.addStretch(1)
-        
-        side_panel.setLayout(side_panel_layout)
-        main_layout.addWidget(side_panel)
-
-        # central area layout
-        central_area = QFrame()
-        central_area_layout = QVBoxLayout()
-
-        central_area.setLayout(central_area_layout)
-        main_layout.addWidget(central_area, stretch=1)
+        # stacked widget for switching between views
+        self.stacked_widget = QStackedWidget()
 
         # set main layout
-        central_widget.setLayout(main_layout)
+        main_layout.addWidget(self.side_panel)
+        main_widget.setLayout(main_layout)
+        main_layout.addWidget(view_area, stretch=1)
 
         # menu bar
         menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu("File")
         run_menu = menu_bar.addMenu("Run")
-
         load_wt_action = QAction("Load WT FASTA", self)
-        load_wt_action.triggered.connect(self.load_fasta_file)
-
+        load_wt_action.triggered.connect(load_fasta_file)
         load_mutation_action = QAction("Load Mutated FASTA", self)
-        load_mutation_action.triggered.connect(self.load_fasta_file)
-
+        load_mutation_action.triggered.connect(load_fasta_file)
         alignment_action = QAction("Run Alignment", self)
         alignment_action.triggered.connect(self.run_alignment)
-
         file_menu.addAction(load_wt_action)
         file_menu.addAction(load_mutation_action)
         run_menu.addAction(alignment_action)
 
-    # def load_fasta_file(self):
-    #     pathname, _ = QFileDialog.getOpenFileName(self, "Open File", "", "FASTA Files (*.fasta)")
-    #     if not pathname:
-    #         return
-        
-    #     try:
-    #         with open(pathname, 'r') as file:
-    #             sequence = file.read()
 
-    #     except FileNotFoundError:
-    #         QMessageBox.critical(self, "File Error", "The selected file could not be found")
-    #     except IOError as e:
-    #         QMessageBox.critical(self, "File Error", f"An error occured while reading the file {e}")
-    #     except Exception as e:
-    #         QMessageBox.critical(self, "Error", f"An unexpected error occured {e}")
-
-    # def run_alignment(self):
-    #     pass
 
 app = QApplication(sys.argv)
 
