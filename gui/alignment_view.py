@@ -1,10 +1,7 @@
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QStackedWidget, 
-                            QHBoxLayout, QPushButton,
-                            QWidget, QFrame)
-from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QHBoxLayout, QWidget
 
-from gui import SidePanel, ViewArea
-
+from .side_panel import SidePanel
+from .view_area import ViewArea
 
 class AlignmentView(QWidget):
     def __init__(self, sequence_1_aligned, sequence_2_aligned):

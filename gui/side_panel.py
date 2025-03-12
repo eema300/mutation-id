@@ -1,10 +1,15 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QVBoxLayout
 
-class SidePanel(QWidget):
+class SidePanel(QFrame):
     def __init__(self):
         super().__init__()
 
-        self.side_panel = QFrame()
-        self.side_panel.setFrameShape(QFrame.Shape.StyledPanel)
-        self.side_panel.setFixedWidth(250)
+        self.setFrameShape(QFrame.Shape.StyledPanel)
+        self.setFixedWidth(250)
         self.side_panel_layout = QVBoxLayout()
+        self.setStyleSheet("border: 2px solid black;")
+
+        self.setObjectName("SidePanel")
+        self.setStyleSheet("#SidePanel { border: 2px solid black; }")
+
+        self.setLayout(self.side_panel_layout)

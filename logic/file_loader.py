@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFileDialog, QMessageBox
+from PyQt6.QtWidgets import QFileDialog, QMessageBox, QMainWindow
 import re
 
 
@@ -11,41 +11,42 @@ AMBIGUOUS_BASE_CODES = ['U', 'M', 'R', 'W', 'S', 'Y',
                         'K', 'V', 'H', 'D', 'B']
 
 
-def load_fasta_file():
-    pathname, _ = QFileDialog.getOpenFileName("Open File", "", "FASTA Files (*.fasta)")
+def load_fasta_file(main_window: QMainWindow):
+    pathname, _ = QFileDialog.getOpenFileName(None, "Open File", "", "FASTA Files (*.fasta)")
     if not pathname:
-        return
+        return None
     
     try:
         with open(pathname, 'r') as file:
             fasta_file = file.read()
-            return read_fasta(fasta_file)
+            return read_fasta(fasta_file, main_window)
 
     except FileNotFoundError:
-        QMessageBox.critical("File Error", "The selected file could not be found")
+        QMessageBox.critical(main_window, "File Error", "The selected file could not be found")
     except IOError as e:
-        QMessageBox.critical("File Error", f"An error occured while reading the file {e}")
+        QMessageBox.critical(main_window, "File Error", f"An error occured while reading the file {e}")
     except Exception as e:
-        QMessageBox.critical("Error", f"An unexpected error occured {e}")
+        QMessageBox.critical(main_window, "Error", f"An unexpected error occured {e}")
 
+    return None
 
 
 # extract header and sequence separately
-def read_fasta(fasta_file):
+def read_fasta(fasta_file, main_window: QMainWindow):
     try:
         # first line is header, subsequent lines are the sequence, pass to array
         fasta = fasta_file.split('\n')
         header = fasta[0]
-        sequence = " ".join(fasta[1:])
+        sequence = "".join(fasta[1:])
 
-        validate_fasta(header, sequence)
+        validate_fasta(header, sequence, main_window)
         seqid = header[1:].split(' ')[0]
         sequence = update_ambiguous_codes(sequence)
-        return list(seqid, sequence)
+        return [seqid, sequence]
 
     except IndexError:
-        QMessageBox.critical("Error", "File was empty.")
-        return -1
+        QMessageBox.critical(main_window, "Error", "File was empty.")
+        return None
 
 
 '''
@@ -113,14 +114,14 @@ def validate_fasta_sequence(sequence):
     return True
 
 
-def validate_fasta(header, sequence):
+def validate_fasta(header, sequence, main_window: QMainWindow):
     # validate header
     if not validate_fasta_header(header):
-        QMessageBox.critical("Invalid Header", "The FASTA header is invalid.")
+        QMessageBox.critical(main_window, "Invalid Header", "The FASTA header is invalid.")
 
     # validate sequence
     if not validate_fasta_sequence(sequence):
-        QMessageBox.critical("Invalid Sequence", "The FASTA sequence is invalid.")
+        QMessageBox.critical(main_window, "Invalid Sequence", "The FASTA sequence is invalid.")
     
     # if no problems, fasta is valid
     

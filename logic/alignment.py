@@ -27,7 +27,7 @@ def align_sequences(sequence_1, sequence_2):
         sequence_1_aligned = best_alignment[0]
         sequence_2_aligned = best_alignment[1]
 
-        return list(sequence_1_aligned, sequence_2_aligned)
+        return [sequence_1_aligned, sequence_2_aligned]
     
     except IndexError:
         # if no alignment possible, list empty, and cannot identify mutations

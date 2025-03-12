@@ -11,12 +11,20 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QStackedWidget,
                             QWidget)
 from PyQt6.QtGui import QAction
 
-from side_panel import SidePanel
-from view_area import ViewArea
+from .side_panel import SidePanel
+from .view_area import ViewArea
 
 from logic import (align_sequences, load_fasta_file, read_fasta,
                    validate_fasta, update_ambiguous_codes)
 
+from .view_caller import init_sequence_view, init_alignment_view
+from .sequence_view import SequenceView
+
+sequence = "AATCTATTCAGTCATAACATTACCCACCCCATGTATGCTTTATTTTTAAATTAACATAGACAATTTTAAA" \
+"AAAAATCGACGGTTTAAATTTTATTCCCAGCTACCCAACTTCCTAGCCAGCTTTTGAACACAGATTTTGT" \
+"TACCCTTCAAGTTTTAACGCTGCTGTATTTTCTTAACTTGAATGTTAAAATGGATTAAGGTTTAGCTCAT" \
+"GGGATACACACATTTTATATATGACTGCTTCCTGTGTAGTAGGGGACATGTCATTCGGTGTTAAATTGTC" \
+"TTAAATAAAGTTCAGTTTTTCCCC"
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -25,16 +33,16 @@ class MainWindow(QMainWindow):
         # main window and layout
         self.setWindowTitle("mutation id")
         self.setMinimumSize(1150, 650)
-        main_widget = QWidget()
-        self.setCentralWidget(main_widget)
-        main_layout = QHBoxLayout()
+        self.main_widget = QWidget()
+        self.setCentralWidget(self.main_widget)
+        self.main_layout = QHBoxLayout()
 
         # side panel
         self.side_panel = SidePanel()
         load_wt_button = QPushButton("Load Wild Type FASTA")
-        load_mutation_button = QPushButton("Load Mutated Sequence FASTA")
-        load_wt_button.clicked.connect(load_fasta_file)
-        load_mutation_button.clicked.connect(load_fasta_file)
+        load_mutation_button = QPushButton("Load Mutated FASTA")
+        load_wt_button.clicked.connect(lambda: init_sequence_view(self))
+        load_mutation_button.clicked.connect(lambda: init_sequence_view(self))
         self.side_panel.side_panel_layout.addWidget(load_wt_button)
         self.side_panel.side_panel_layout.addWidget(load_mutation_button)
         self.side_panel.side_panel_layout.addStretch(1)
@@ -42,29 +50,28 @@ class MainWindow(QMainWindow):
 
         # view area
         view_area = ViewArea()
-        view_area.setLayout(view_area.view_area_layout)
 
         # stacked widget for switching between views
-        self.stacked_widget = QStackedWidget()
+        #self.stacked_widget = QStackedWidget()
 
         # set main layout
-        main_layout.addWidget(self.side_panel)
-        main_widget.setLayout(main_layout)
-        main_layout.addWidget(view_area, stretch=1)
+        self.main_layout.addWidget(self.side_panel)
+        self.main_layout.addWidget(view_area, stretch=1)
+        self.main_widget.setLayout(self.main_layout)
 
         # menu bar
-        menu_bar = self.menuBar()
-        file_menu = menu_bar.addMenu("File")
-        run_menu = menu_bar.addMenu("Run")
-        load_wt_action = QAction("Load WT FASTA", self)
-        load_wt_action.triggered.connect(load_fasta_file)
-        load_mutation_action = QAction("Load Mutated FASTA", self)
-        load_mutation_action.triggered.connect(load_fasta_file)
-        alignment_action = QAction("Run Alignment", self)
-        alignment_action.triggered.connect(self.run_alignment)
-        file_menu.addAction(load_wt_action)
-        file_menu.addAction(load_mutation_action)
-        run_menu.addAction(alignment_action)
+        # menu_bar = self.menuBar()
+        # file_menu = menu_bar.addMenu("File")
+        # run_menu = menu_bar.addMenu("Run")
+        # load_wt_action = QAction("Load WT FASTA", self)
+        # load_wt_action.triggered.connect(load_fasta_file)
+        # load_mutation_action = QAction("Load Mutated FASTA", self)
+        # load_mutation_action.triggered.connect(load_fasta_file)
+        # alignment_action = QAction("Run Alignment", self)
+        # alignment_action.triggered.connect(self.run_alignment)
+        # file_menu.addAction(load_wt_action)
+        # file_menu.addAction(load_mutation_action)
+        # run_menu.addAction(alignment_action)
 
 
 

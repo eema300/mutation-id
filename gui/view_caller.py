@@ -9,27 +9,31 @@
 # constructor
 
 # yay!
+from PyQt6.QtWidgets import QMainWindow
 from logic import (align_sequences, load_fasta_file)
 
-from gui import SequenceView, AlignmentView
+from .sequence_view import SequenceView
+from .alignment_view import AlignmentView
 
 
-def init_sequence_view():
-    on_load = load_fasta_file()
+def init_sequence_view(main_window: QMainWindow):
+    print(type(main_window))
+
+    on_load = load_fasta_file(main_window)
     
-    if type(on_load) is list:
+    if on_load:
         global seqid, sequence
-        seqid = on_load[0]
-        sequence = on_load[1]
+        seqid, sequence = on_load
 
         # call sequence viewer
         sequence_view = SequenceView(seqid, sequence,
                                      seqid, sequence)
+        
+        main_window.main_layout.addWidget(sequence_view)
 
 
-    # if not a list, that means it returned -1 on error
 
-
+# fix returns to None on error
 def init_alignment_view():
     on_align = align_sequences(sequence, sequence)
 
@@ -40,4 +44,3 @@ def init_alignment_view():
         # call alignment viewer
         alignment_view = AlignmentView(sequence_1_aligned, sequence_2_aligned)
 
-    # if not a list, that means it returned -1 on error
