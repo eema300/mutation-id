@@ -1,6 +1,5 @@
 # from PyQt6.QtCharts import QChartView
-from PyQt6.QtWidgets import (QWidget, QHBoxLayout, QLabel,
-                             QApplication)
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 from .side_panel import SidePanel
 from .view_area import ViewArea

@@ -25,11 +25,15 @@ def init_sequence_view(main_window: QMainWindow):
         global seqid, sequence
         seqid, sequence = on_load
 
-        # call sequence viewer
+        # call sequence view constructor
         sequence_view = SequenceView(seqid, sequence,
                                      seqid, sequence)
         
-        main_window.main_layout.addWidget(sequence_view)
+        # add to main_window layout
+        main_window.main_widget.addWidget(sequence_view)
+
+        # switch to sequence view
+        main_window.main_widget.setCurrentWidget(sequence_view)
 
 
 
