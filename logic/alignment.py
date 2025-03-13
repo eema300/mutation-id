@@ -12,6 +12,7 @@ def align_sequences(sequence_1, sequence_2):
     alignments = pw.align.localms(sequence_1, sequence_2, 
                                   MATCH_SCORE, 
                                   MISMATCH_PENALTY, 
+                                  GAP_PENALTY,
                                   GAP_PENALTY)
     
     # alignments is a list of tuples of best alignments, best score is elem 0
@@ -36,5 +37,5 @@ def align_sequences(sequence_1, sequence_2):
                              "a different sequence more similar to the"
                              "wild type.")
         
-        return -1
+        return None
         

@@ -5,20 +5,10 @@
 
 import sys
 
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QStackedWidget, 
-                            QHBoxLayout, QPushButton,
-                            QWidget)
+from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from PyQt6.QtGui import QAction
 
-from .side_panel import SidePanel
-from .view_area import ViewArea
-
-from logic import (align_sequences, load_fasta_file, read_fasta,
-                   validate_fasta, update_ambiguous_codes)
-
-from .view_caller import init_sequence_view, init_alignment_view
-from .sequence_view import SequenceView
+# from .view_caller import init_sequence_view
 from .welcome_view import WelcomeView
 
 class MainWindow(QMainWindow):
@@ -43,14 +33,14 @@ class MainWindow(QMainWindow):
         # file_menu = menu_bar.addMenu("File")
         # run_menu = menu_bar.addMenu("Run")
         # load_wt_action = QAction("Load WT FASTA", self)
-        # load_wt_action.triggered.connect(load_fasta_file)
+        # load_wt_action.triggered.connect(lambda: init_sequence_view(self))
         # load_mutation_action = QAction("Load Mutated FASTA", self)
-        # load_mutation_action.triggered.connect(load_fasta_file)
-        # alignment_action = QAction("Run Alignment", self)
-        # alignment_action.triggered.connect(self.run_alignment)
+        # load_mutation_action.triggered.connect(lambda: init_sequence_view(self))
+        # #alignment_action = QAction("Run Alignment", self)
+        # # alignment_action.triggered.connect(self.run_alignment)
         # file_menu.addAction(load_wt_action)
         # file_menu.addAction(load_mutation_action)
-        # run_menu.addAction(alignment_action)
+        # # run_menu.addAction(alignment_action)
 
 
 
