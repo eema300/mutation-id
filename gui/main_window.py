@@ -1,14 +1,11 @@
 # need a state variable that changes every time
 # you add a sequence using the file loader
 # it needs to go from 0 to 1 to 2 and then decrease
-# as such when user deletes a dequence
+# as such when user deletes a sequence
 
 import sys
-
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
-from PyQt6.QtGui import QAction
 
-# from .view_caller import init_sequence_view
 from .welcome_view import WelcomeView
 
 class MainWindow(QMainWindow):
@@ -41,12 +38,3 @@ class MainWindow(QMainWindow):
         # file_menu.addAction(load_wt_action)
         # file_menu.addAction(load_mutation_action)
         # # run_menu.addAction(alignment_action)
-
-
-
-app = QApplication(sys.argv)
-
-window = MainWindow()
-window.show()
-
-app.exec()
