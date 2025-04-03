@@ -1,5 +1,4 @@
-from PyQt6.QtWidgets import (QWidget, QFrame, 
-                             QVBoxLayout, QScrollArea)
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QScrollArea)
 from PyQt6.QtCore import Qt
 
 class ViewArea(QScrollArea):
@@ -12,5 +11,3 @@ class ViewArea(QScrollArea):
 
         self.setWidget(self.inner_widget)
         self.setWidgetResizable(True)
-
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)

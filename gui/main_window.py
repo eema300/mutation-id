@@ -3,9 +3,7 @@
 # it needs to go from 0 to 1 to 2 and then decrease
 # as such when user deletes a sequence
 
-import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
-
+from PyQt6.QtWidgets import QMainWindow, QStackedWidget
 from .welcome_view import WelcomeView
 
 class MainWindow(QMainWindow):

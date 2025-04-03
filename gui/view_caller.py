@@ -10,6 +10,8 @@ seqid_WT = ""
 seqid_MT = ""
 sequence_WT = ""
 sequence_MT = ""
+sequence_WT_aligned = ""
+sequence_MT_aligned = ""
 
 
 # def init_sequence_view(main_window: QMainWindow):
@@ -89,10 +91,12 @@ def init_alignment_view(main_window: QMainWindow):
     on_align = align_sequences(sequence_WT, sequence_MT)
 
     if on_align:
+        global sequence_WT_aligned, sequence_MT_aligned
         sequence_WT_aligned, sequence_MT_aligned = on_align
 
         # call alignment viewer
-        alignment_view = AlignmentView(seqid_WT, sequence_WT_aligned, 
+        alignment_view = AlignmentView(main_window, 
+                                       seqid_WT, sequence_WT_aligned, 
                                        seqid_MT, sequence_MT_aligned)
 
         # add to main_window layout
@@ -100,3 +104,19 @@ def init_alignment_view(main_window: QMainWindow):
 
         # switch to alignment view
         main_window.main_widget.setCurrentWidget(alignment_view)
+
+
+
+def init_mutation_view(main_window: QMainWindow):
+    from .mutation_view import MutationView
+
+    # call mutation viewer
+    mutation_view = MutationView(main_window,
+                                 seqid_WT, sequence_WT_aligned, 
+                                 seqid_MT, sequence_MT_aligned)
+    
+    # add to main_window layout
+    main_window.main_widget.addWidget(mutation_view)
+
+    # switch to mutation view
+    main_window.main_widget.setCurrentWidget(mutation_view)

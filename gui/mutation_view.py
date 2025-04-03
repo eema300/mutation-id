@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QHBoxLayout, QWidget, QLabel, QPushButton
 from PyQt6.QtCore import Qt
+
 from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
-from .view_caller import init_mutation_view
 
-class AlignmentView(QWidget):
+class MutationView(QWidget):
     def __init__(self, main_window,
                  seqid_1, sequence_1_aligned, 
                  seqid_2, sequence_2_aligned):
@@ -22,13 +22,11 @@ class AlignmentView(QWidget):
         seqid_2_label.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.side_panel.side_panel_layout.addWidget(seqid_1_label)
         self.side_panel.side_panel_layout.addWidget(seqid_2_label)
-        id_mutations_button = QPushButton('Highlight Mutations')
-        id_mutations_button.clicked.connect(lambda: init_mutation_view(main_window))
-        self.side_panel.side_panel_layout.addWidget(id_mutations_button)
         self.side_panel.side_panel_layout.addStretch(1)
         self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
         # view area
+        # mutations need to be highlighted
         self.view_area = ViewArea()
         # sequence_1_label = QLabel(sequence_1_aligned)
         # sequence_2_label = QLabel(sequence_2_aligned)
