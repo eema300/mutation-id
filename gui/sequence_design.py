@@ -13,6 +13,8 @@ class SequenceDesign(QGraphicsView):
         '-': QColor('#ff7878'),
     }
 
+    cell_size = 40
+
     def __init__(self, sequence_1, sequence_2):
         super().__init__()
         self.scene = QGraphicsScene(self)
@@ -23,31 +25,29 @@ class SequenceDesign(QGraphicsView):
 
         # only display loaded sequences
         if sequence_1:
-            self.build_seq_graphic(sequence_1, 0)
+            self.build_seq_graphic(sequence_1, 0.5)
             
         if sequence_2:
-            self.build_seq_graphic(sequence_2, 1)
+            self.build_seq_graphic(sequence_2, 1.5)
 
 
     def update_size(self):
-        self.scene.setSceneRect(0, 0, self.scene.sceneRect().width(), self.scene.sceneRect().height() + 50)
+        vertical_margin = 120
+        self.scene.setSceneRect(0, 0, self.scene.sceneRect().width(), 120)
 
     def build_seq_graphic(self, sequence, row):
-        # square cell shape, 20x20 pixels
-        cell_size = 40
-
         # for calculating next cell placement
-        col = 0
+        col = 0.5
 
         for nucleotide in sequence:
             # calculate current position
-            col_pos = col * cell_size
-            row_pos = row * cell_size
+            col_pos = col * self.cell_size
+            row_pos = row * self.cell_size
 
             # get color
             color = self.nucleotide_colors.get(nucleotide, QColor('white'))
             # create shape at position
-            cell = QGraphicsRectItem(col_pos, row_pos, cell_size, cell_size)
+            cell = QGraphicsRectItem(col_pos, row_pos, self.cell_size, self.cell_size)
             # set color
             cell.setBrush(QBrush(color))
             # add shape

@@ -1,6 +1,10 @@
 from PyQt6.QtWidgets import QMainWindow
 from logic import (align_sequences, load_fasta_file)
 
+# enum consts
+WT = 0
+MT = 1
+
 # state variable if sequence is diplayed
 WILD_TYPE_ON = False
 MUTATED_TYPE_ON = False
@@ -120,3 +124,35 @@ def init_mutation_view(main_window: QMainWindow):
 
     # switch to mutation view
     main_window.main_widget.setCurrentWidget(mutation_view)
+
+
+
+def delete_sequence(main_window: QMainWindow, state):
+    from .sequence_view import SequenceView
+    
+    global seqid_WT, seqid_MT, sequence_WT, sequence_MT, WILD_TYPE_ON, MUTATED_TYPE_ON
+
+    # delete wild type 
+    if state == WT:
+        seqid_WT = ""
+        sequence_WT = ""
+        WILD_TYPE_ON = False
+        
+    elif state == MT:
+        seqid_MT = ""
+        sequence_MT = ""
+        MUTATED_TYPE_ON = False
+
+    else:
+        return
+    
+    # call sequence view constructor
+    sequence_view = SequenceView(main_window, 
+                                    seqid_WT, sequence_WT, WILD_TYPE_ON,
+                                    seqid_MT, sequence_MT, MUTATED_TYPE_ON)
+    
+    # add to main_window layout
+    main_window.main_widget.addWidget(sequence_view)
+
+    # switch to sequence view
+    main_window.main_widget.setCurrentWidget(sequence_view)

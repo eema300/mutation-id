@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
-from .view_caller import init_alignment_view
+from .view_caller import init_alignment_view, delete_sequence
 
 
 class SequenceView(QWidget):
@@ -21,12 +21,29 @@ class SequenceView(QWidget):
         # if both on, load both sequences
         if WT_ON and MT_ON:
             # add seq ids, alignment button to side panel
+            delete_and_label_1 = QWidget()
+            delete_and_label_1_layout = QHBoxLayout()
+            delete_seq_1 = QPushButton('x')
+            delete_seq_1.clicked.connect(lambda: delete_sequence(main_window, 0))
+            delete_and_label_1_layout.addWidget(delete_seq_1)
             seqid_WT_label = QLabel(seqidWT)
             seqid_WT_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+            delete_and_label_1_layout.addWidget(seqid_WT_label)
+            delete_and_label_1.setLayout(delete_and_label_1_layout)
+            self.side_panel.side_panel_layout.addWidget(delete_and_label_1)
+            
+            delete_and_label_2 = QWidget()
+            delete_and_label_2_layout = QHBoxLayout()
+            delete_seq_2 = QPushButton('x')
+            delete_seq_2.clicked.connect(lambda: delete_sequence(main_window, 1))
+            delete_and_label_2_layout.addWidget(delete_seq_2)
             seqid_MT_label = QLabel(seqidMT)
             seqid_MT_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-            self.side_panel.side_panel_layout.addWidget(seqid_WT_label)
-            self.side_panel.side_panel_layout.addWidget(seqid_MT_label)
+            delete_and_label_2_layout.addWidget(seqid_MT_label)
+            delete_and_label_2.setLayout(delete_and_label_2_layout)
+            self.side_panel.side_panel_layout.addWidget(delete_and_label_2)
+            #self.side_panel.side_panel_layout.addWidget(seqid_WT_label)
+            #self.side_panel.side_panel_layout.addWidget(seqid_MT_label)
             alignment_button = QPushButton("Align Sequences")
             alignment_button.clicked.connect(lambda: init_alignment_view(main_window))
             self.side_panel.side_panel_layout.addWidget(alignment_button)
@@ -35,10 +52,6 @@ class SequenceView(QWidget):
 
             # add sequences to view area
             self.view_area = ViewArea()
-            # sequence_WT_label = QLabel(sequenceWT)
-            # sequence_MT_label = QLabel(sequenceMT)
-            # self.view_area.inner_widget_layout.addWidget(sequence_WT_label)
-            # self.view_area.inner_widget_layout.addWidget(sequence_MT_label)
             sequence_design = SequenceDesign(sequence_1=sequenceWT,
                                              sequence_2=sequenceMT)
             self.view_area.inner_widget_layout.addWidget(sequence_design)
@@ -60,8 +73,6 @@ class SequenceView(QWidget):
 
             # add sequences to view area
             self.view_area = ViewArea()
-            # sequence_WT_label = QLabel(sequenceWT)
-            # self.view_area.inner_widget_layout.addWidget(sequence_WT_label)
             sequence_design = SequenceDesign(sequence_1=sequenceWT,
                                              sequence_2=None)
             self.view_area.inner_widget_layout.addWidget(sequence_design)
@@ -83,8 +94,6 @@ class SequenceView(QWidget):
 
             # add sequences to view area
             self.view_area = ViewArea()
-            # sequence_MT_label = QLabel(sequenceMT)
-            # self.view_area.inner_widget_layout.addWidget(sequence_MT_label)
             sequence_design = SequenceDesign(sequence_1=None,
                                              sequence_2=sequenceMT)
             self.view_area.inner_widget_layout.addWidget(sequence_design)
