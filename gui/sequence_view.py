@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
-from .view_caller import init_alignment_view, delete_sequence
+from .view_caller import init_alignment_view, delete_sequence, reset
 
 
 class SequenceView(QWidget):
@@ -50,6 +50,9 @@ class SequenceView(QWidget):
             alignment_button.clicked.connect(lambda: init_alignment_view(main_window))
             self.side_panel.side_panel_layout.addWidget(alignment_button)
             self.side_panel.side_panel_layout.addStretch(1)
+            reset_button = QPushButton('Reset')
+            reset_button.clicked.connect(lambda: reset(main_window))
+            self.side_panel.side_panel_layout.addWidget(reset_button)
             self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
             # add sequences to view area
@@ -71,6 +74,9 @@ class SequenceView(QWidget):
             load_mutation_button.clicked.connect(lambda: init_sequence_view_MT(main_window))
             self.side_panel.side_panel_layout.addWidget(load_mutation_button)
             self.side_panel.side_panel_layout.addStretch(1)
+            reset_button = QPushButton('Reset')
+            reset_button.clicked.connect(lambda: reset(main_window))
+            self.side_panel.side_panel_layout.addWidget(reset_button)
             self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
             # add sequences to view area
@@ -92,6 +98,9 @@ class SequenceView(QWidget):
             seqid_MT_label.setAlignment(Qt.AlignmentFlag.AlignRight)
             self.side_panel.side_panel_layout.addWidget(seqid_MT_label)
             self.side_panel.side_panel_layout.addStretch(1)
+            reset_button = QPushButton('Reset')
+            reset_button.clicked.connect(lambda: reset(main_window))
+            self.side_panel.side_panel_layout.addWidget(reset_button)
             self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
             # add sequences to view area

@@ -156,3 +156,30 @@ def delete_sequence(main_window: QMainWindow, state):
 
     # switch to sequence view
     main_window.main_widget.setCurrentWidget(sequence_view)
+
+
+
+def reset(main_window: QMainWindow):
+    # empty globals
+    global WILD_TYPE_ON, MUTATED_TYPE_ON, seqid_WT, seqid_MT
+    global sequence_WT, sequence_MT, sequence_WT_aligned, sequence_MT_aligned
+    
+    WILD_TYPE_ON = False
+    MUTATED_TYPE_ON = False
+    seqid_WT = ""
+    seqid_MT = ""
+    sequence_WT = ""
+    sequence_MT = ""
+    sequence_WT_aligned = ""
+    sequence_MT_aligned = ""
+
+    # go back to welcome view
+    from .welcome_view import WelcomeView
+
+    welcome_view = WelcomeView(main_window)
+
+    # add to main_window layout
+    main_window.main_widget.addWidget(welcome_view)
+
+    # switch to sequence view
+    main_window.main_widget.setCurrentWidget(welcome_view)

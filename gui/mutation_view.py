@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt
 from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
+from .view_caller import reset
 from logic import export_png, export_fasta
 
 class MutationView(QWidget):
@@ -47,6 +48,9 @@ class MutationView(QWidget):
                                                                  seqid_1, seqid_2,
                                                                  sequence_1_aligned, sequence_2_aligned))
         self.side_panel.side_panel_layout.addWidget(export_fasta_button)
+        reset_button = QPushButton('Reset')
+        reset_button.clicked.connect(lambda: reset(main_window))
+        self.side_panel.side_panel_layout.addWidget(reset_button)
         # combine side panel together
         self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
