@@ -1,21 +1,37 @@
 import sys
 
-from PyQt6.QtCore import QSize, Qt, QCoreApplication, QThread, pyqtSignal
+from PyQt6.QtCore import QSize, Qt, QCoreApplication, QThread, pyqtSignal, QSettings
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QMessageBox, 
                             QFileDialog, QHBoxLayout, QPushButton,
                             QWidget, QFrame, QVBoxLayout, QGroupBox, QTextEdit, QProgressBar, QLabel, QTabWidget, QSplitter, QStatusBar, QTableWidget, QTableWidgetItem, QCheckBox)
 from PyQt6.QtGui import QAction, QIcon, QMovie
+from Bio import pairwise2
+from Bio.pairwise2 import format_alignment
 
 class AlignmentThread(QThread):
     progress = pyqtSignal(int)
-    finished = pyqtSignal()
+    finished = pyqtSignal(object)
+
+    def __init__(self, wt_sequence, mutant_sequence):
+        super().__init__()
+        self.wt_sequence = wt_sequence
+        self.mutant_sequence = mutant_sequence
 
     def run(self):
+        from Bio import pairwise2
+        
+
+
+    #Perform Sequence Alignment
+        alignments = pairwise2.align.globalxx(self.wt_sequence, self.mutant_sequence)
+        best_alignment = alignments[0] if alignments else None
+
+    #Emit Progress Updates
         for i in range(101):
             self.progress.emit(i)
-            QThread.msleep(50)
-        self.finished.emit()
-# from logic import file_loader
+            self.msleep(50)
+
+        self.finished.emit(best_alignment)
 
 
 class MainWindow(QMainWindow):
@@ -29,6 +45,8 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QHBoxLayout()
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(15)
 
         #Status Bar
         self.statusBar().showMessage("Ready")
@@ -45,6 +63,8 @@ class MainWindow(QMainWindow):
         side_panel.setFrameShape(QFrame.Shape.StyledPanel)
         side_panel.setFixedWidth(250)
         side_panel_layout = QVBoxLayout()
+        side_panel_layout.setContentsMargins(5, 5, 5, 5)
+        side_panel_layout.setSpacing(10)
 
         #Group Box for Loading Sequences
         load_group = QGroupBox("Load Sequences")
@@ -101,11 +121,28 @@ class MainWindow(QMainWindow):
         self.progress_bar = QProgressBar()
         self.loading_label = QLabel()
         self.loading_label.hide()
+        self.result_display = QTextEdit()
+        self.result_display.setReadOnly(True)
+        self.result_display.setFontFamily("Courier New")
+        self.result_display.setFontPointSize(12)
+        self.result_display.setMinimumHeight(300)
+        #New Run Alignment Button
+        self.run_alignment_button = QPushButton("Run Alignment")
+        self.run_alignment_button.setToolTip("Click to run sequence alignment")
+        self.run_alignment_button.clicked.connect(self.run_alignment)
         align_tab_layout.addWidget(QLabel("Alignment Progress:"))
         align_tab_layout.addWidget(self.progress_bar)
         align_tab_layout.addWidget(self.loading_label)
+        align_tab_layout.addWidget(QLabel("Alignment Results:"))
+        align_tab_layout.addWidget(self.result_display)
+        align_tab_layout.addWidget(self.run_alignment_button)
         align_tab.setLayout(align_tab_layout)
+        self.save_results_button = QPushButton("Save Results")
+        self.save_results_button.clicked.connect(self.save_results)
 
+        align_tab_layout.addWidget(self.save_results_button)
+
+        
         # menu bar
         menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu("File")
@@ -200,17 +237,61 @@ class MainWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An unexpected error occured {e}")
 
+    def save_results(self):
+             options = QFileDialog.Options()
+             file_path, _ = QFileDialog.getSaveFileName(self, "Save Alignment Results", "", "Text Files (*.txt);;All Files (*)", options=options)
+
+             if file_path:
+                try:
+                    with open(file_path, "w") as file:
+                            file.write(self.result_display.toPlainText())  # Assuming results are stored here
+                            self.statusBar().showMessage("Results saved successfully!")
+                except Exception as e:
+                        QMessageBox.critical(self, "Error", f"Failed to save results: {e}")
+
+
     def run_alignment(self):
+         wt_text = self.wt_textbox.toPlainText().split("\n", 1)[-1].replace("\n", "")
+         mutant_text = self.mutant_textbox.toPlainText().split("\n", 1)[-1].replace("\n", "")
+
+         if not wt_text or not mutant_text:
+             QMessageBox.warning(self, "Error", "Both sequences must be loaded before running alignment.")
+             return
+         
+
+         self.statusBar().showMessage("Alignment in progress...")
          self.loading_label.show()
          self.progress_bar.setValue(0)
-         self.thread = AlignmentThread()
+         self.thread = AlignmentThread(wt_text, mutant_text)
          self.thread.progress.connect(self.progress_bar.setValue)
          self.thread.finished.connect(self.alignment_done)
          self.thread.start()
 
-    def alignment_done(self):
+    def alignment_done(self, best_alignment):
         self.loading_label.hide()
-        QMessageBox.information(self, "Success", "Alignment Completed!")
+        
+        if best_alignment:
+            from Bio.pairwise2 import format_alignment
+            #Format the alignment using HTML
+            aligned_seq1, aligned_seq2, score, begin, end = best_alignment
+            #Initialize an empty result for the HTML formatted alignment
+            html_result = "<pre>"
+
+            #Compare each character and highlight mismatches
+            for c1, c2 in zip(aligned_seq1, aligned_seq2):
+                if c1 == c2:
+                    html_result += f"<span style='color: green;'>{c1}</span>"
+                else:
+                    html_result += f"<span style='color: red;'>{c1}</span>"
+
+            html_result += "</pre>"
+
+            self.result_display.setHtml(html_result)
+            QMessageBox.information(self, "Success", f"Alignment Completed!\n\n{format_alignment(*best_alignment)}")
+        else:
+            QMessageBox.warning(self, "Warning", "No alignment found.")
+
+        
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
