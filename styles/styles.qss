@@ -20,3 +20,15 @@ QLabel {
     padding: 8px;
     border: 2px solid transparent;
 }
+
+ViewArea {
+    padding: 0px;
+}
+
+SidePanel {
+}
+
+QGraphicsView {
+    border: 2px solid transparent;
+    margin: 0px;
+}

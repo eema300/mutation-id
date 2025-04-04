@@ -23,6 +23,7 @@ class SequenceView(QWidget):
             # add seq ids, alignment button to side panel
             delete_and_label_1 = QWidget()
             delete_and_label_1_layout = QHBoxLayout()
+            delete_and_label_1_layout.setContentsMargins(0, 0, 0, 0)
             delete_seq_1 = QPushButton('x')
             delete_seq_1.clicked.connect(lambda: delete_sequence(main_window, 0))
             delete_and_label_1_layout.addWidget(delete_seq_1)
@@ -34,6 +35,7 @@ class SequenceView(QWidget):
             
             delete_and_label_2 = QWidget()
             delete_and_label_2_layout = QHBoxLayout()
+            delete_and_label_2_layout.setContentsMargins(0, 0, 0, 0)
             delete_seq_2 = QPushButton('x')
             delete_seq_2.clicked.connect(lambda: delete_sequence(main_window, 1))
             delete_and_label_2_layout.addWidget(delete_seq_2)
@@ -56,7 +58,7 @@ class SequenceView(QWidget):
                                              sequence_2=sequenceMT)
             self.view_area.inner_widget_layout.addWidget(sequence_design)
             self.view_area.inner_widget_layout.addStretch(1)
-            self.view_area.inner_widget.setLayout(self.view_area.inner_widget_layout)
+            self.view_area.setLayout(self.view_area.inner_widget_layout)
 
         # if WT on, load WT sequence, keep load MT button
         elif WT_ON and not MT_ON:
@@ -77,7 +79,7 @@ class SequenceView(QWidget):
                                              sequence_2=None)
             self.view_area.inner_widget_layout.addWidget(sequence_design)
             self.view_area.inner_widget_layout.addStretch(1)
-            self.view_area.inner_widget.setLayout(self.view_area.inner_widget_layout)
+            self.view_area.setLayout(self.view_area.inner_widget_layout)
 
         # if MT on, load MT sequence, keep load WT button
         elif MT_ON and not WT_ON:
@@ -98,7 +100,7 @@ class SequenceView(QWidget):
                                              sequence_2=sequenceMT)
             self.view_area.inner_widget_layout.addWidget(sequence_design)
             self.view_area.inner_widget_layout.addStretch(1)
-            self.view_area.inner_widget.setLayout(self.view_area.inner_widget_layout)
+            self.view_area.setLayout(self.view_area.inner_widget_layout)
 
         else:
             print("something very bad happened!!!!!!!!!")

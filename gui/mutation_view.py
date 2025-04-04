@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QHBoxLayout, QWidget, QLabel, QPushButton
 from PyQt6.QtCore import Qt
-
 from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
+from logic import export_png, export_fasta
 
 class MutationView(QWidget):
     def __init__(self, main_window,
@@ -23,7 +23,6 @@ class MutationView(QWidget):
         self.side_panel.side_panel_layout.addWidget(seqid_1_label)
         self.side_panel.side_panel_layout.addWidget(seqid_2_label)
         self.side_panel.side_panel_layout.addStretch(1)
-        self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
         # view area
         # mutations need to be highlighted
@@ -36,7 +35,21 @@ class MutationView(QWidget):
                                          sequence_2=sequence_2_aligned)
         self.view_area.inner_widget_layout.addWidget(sequence_design)
         self.view_area.inner_widget_layout.addStretch(1)
-        self.view_area.inner_widget.setLayout(self.view_area.inner_widget_layout)
+        self.view_area.setLayout(self.view_area.inner_widget_layout)
+
+        # export alignment as png
+        export_png_button = QPushButton('Export As PNG')
+        export_png_button.clicked.connect(lambda: export_png(main_window, sequence_design.scene,
+                                                             seqid_1, seqid_2))
+        self.side_panel.side_panel_layout.addWidget(export_png_button)
+        export_fasta_button = QPushButton('Export As FASTA')
+        export_fasta_button.clicked.connect(lambda: export_fasta(main_window, 
+                                                                 seqid_1, seqid_2,
+                                                                 sequence_1_aligned, sequence_2_aligned))
+        self.side_panel.side_panel_layout.addWidget(export_fasta_button)
+        # combine side panel together
+        self.side_panel.setLayout(self.side_panel.side_panel_layout)
+
 
         # add child widgets and set main layout
         self.layout.addWidget(self.side_panel)

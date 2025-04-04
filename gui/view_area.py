@@ -1,13 +1,12 @@
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QScrollArea)
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (QVBoxLayout, QFrame)
 
-class ViewArea(QScrollArea):
+class ViewArea(QFrame):
     def __init__(self):
         super().__init__()
 
-        self.inner_widget = QWidget()
-        self.inner_widget_layout = QVBoxLayout()
-        self.inner_widget.setLayout(self.inner_widget_layout)
+        self.setFrameShape(QFrame.Shape.Box)
+        self.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.setWidget(self.inner_widget)
-        self.setWidgetResizable(True)
+        self.inner_widget_layout = QVBoxLayout()
+        self.inner_widget_layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.inner_widget_layout)

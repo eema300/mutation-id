@@ -22,22 +22,25 @@ class SequenceDesign(QGraphicsView):
 
         # turn vertical scroll bar off
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setFixedHeight(125)
 
         # only display loaded sequences
         if sequence_1:
-            self.build_seq_graphic(sequence_1, 0.5)
+            self.build_seq_graphic(sequence_1, 0.25)
             
         if sequence_2:
-            self.build_seq_graphic(sequence_2, 1.5)
+            self.build_seq_graphic(sequence_2, 1.25)
+
+        self.scene.setSceneRect(0, 0, self.scene.sceneRect().width(), 105)
 
 
-    def update_size(self):
-        vertical_margin = 120
-        self.scene.setSceneRect(0, 0, self.scene.sceneRect().width(), 120)
+    # def update_size(self):
+    #     vertical_margin = 120
+    #     self.scene.setSceneRect(0, 0, self.scene.sceneRect().width(), 105)
 
     def build_seq_graphic(self, sequence, row):
         # for calculating next cell placement
-        col = 0.5
+        col = 0.25
 
         for nucleotide in sequence:
             # calculate current position
@@ -66,4 +69,4 @@ class SequenceDesign(QGraphicsView):
             # increment column
             col += 1
 
-        self.update_size()
+        # self.update_size()
