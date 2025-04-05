@@ -37,7 +37,6 @@ def export_fasta(main_window: QMainWindow,
 
     # save file
     filename = '-'.join([seqid_WT, seqid_MT, 'alignment']) + '.fasta'
-    print(filename)
     pathname, _ = QFileDialog.getSaveFileName(None, 'Save FASTA', filename, "FASTA Files (*.fasta)")
 
     if not pathname:

@@ -17,28 +17,23 @@ class MutationView(QWidget):
 
         # side panel
         self.side_panel = SidePanel()
-        seqid_1_label = QLabel(seqid_1)
-        seqid_1_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-        seqid_2_label = QLabel(seqid_2)
-        seqid_2_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.side_panel.side_panel_layout.addWidget(seqid_1_label)
-        self.side_panel.side_panel_layout.addWidget(seqid_2_label)
-        self.side_panel.side_panel_layout.addStretch(1)
 
         # view area
         # mutations need to be highlighted
         self.view_area = ViewArea()
-        # sequence_1_label = QLabel(sequence_1_aligned)
-        # sequence_2_label = QLabel(sequence_2_aligned)
-        # self.view_area.inner_widget_layout.addWidget(sequence_1_label)
-        # self.view_area.inner_widget_layout.addWidget(sequence_2_label)
-        sequence_design = SequenceDesign(sequence_1=sequence_1_aligned,
-                                         sequence_2=sequence_2_aligned)
-        self.view_area.inner_widget_layout.addWidget(sequence_design)
-        self.view_area.inner_widget_layout.addStretch(1)
-        self.view_area.setLayout(self.view_area.inner_widget_layout)
 
-        # export alignment as png
+
+        seqid_1_label = QLabel(seqid_1)
+        seqid_1_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.side_panel.wt_widget_layout.addWidget(seqid_1_label)
+        self.side_panel.wt_widget.setLayout(self.side_panel.wt_widget_layout)
+        seqid_2_label = QLabel(seqid_2)
+        seqid_2_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.side_panel.mt_widget_layout.addWidget(seqid_2_label)
+        self.side_panel.mt_widget.setLayout(self.side_panel.mt_widget_layout)
+        self.side_panel.side_panel_layout.addStretch(1)
+
+
         export_png_button = QPushButton('Export As PNG')
         export_png_button.clicked.connect(lambda: export_png(main_window, sequence_design.scene,
                                                              seqid_1, seqid_2))
@@ -54,6 +49,11 @@ class MutationView(QWidget):
         # combine side panel together
         self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
+        sequence_design = SequenceDesign(sequence_1=sequence_1_aligned,
+                                         sequence_2=sequence_2_aligned)
+        self.view_area.inner_widget_layout.addWidget(sequence_design)
+        self.view_area.inner_widget_layout.addStretch(1)
+        self.view_area.setLayout(self.view_area.inner_widget_layout)
 
         # add child widgets and set main layout
         self.layout.addWidget(self.side_panel)

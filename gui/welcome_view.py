@@ -16,8 +16,10 @@ class WelcomeView(QWidget):
         load_mutation_button = QPushButton("Load Mutated FASTA")
         load_wt_button.clicked.connect(lambda: init_sequence_view_WT(main_window))
         load_mutation_button.clicked.connect(lambda: init_sequence_view_MT(main_window))
-        self.side_panel.side_panel_layout.addWidget(load_wt_button)
-        self.side_panel.side_panel_layout.addWidget(load_mutation_button)
+        self.side_panel.wt_widget_layout.addWidget(load_wt_button)
+        self.side_panel.mt_widget_layout.addWidget(load_mutation_button)
+        self.side_panel.wt_widget.setLayout(self.side_panel.wt_widget_layout)
+        self.side_panel.mt_widget.setLayout(self.side_panel.mt_widget_layout)
         self.side_panel.side_panel_layout.addStretch(1)
         self.side_panel.setLayout(self.side_panel.side_panel_layout)
 

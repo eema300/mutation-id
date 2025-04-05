@@ -129,7 +129,6 @@ def init_mutation_view(main_window: QMainWindow):
 
 def delete_sequence(main_window: QMainWindow, state):
     from .sequence_view import SequenceView
-    
     global seqid_WT, seqid_MT, sequence_WT, sequence_MT, WILD_TYPE_ON, MUTATED_TYPE_ON
 
     # delete wild type 
@@ -137,7 +136,8 @@ def delete_sequence(main_window: QMainWindow, state):
         seqid_WT = ""
         sequence_WT = ""
         WILD_TYPE_ON = False
-        
+
+    # delete mutated type        
     elif state == MT:
         seqid_MT = ""
         sequence_MT = ""
@@ -145,17 +145,25 @@ def delete_sequence(main_window: QMainWindow, state):
 
     else:
         return
-    
-    # call sequence view constructor
-    sequence_view = SequenceView(main_window, 
-                                    seqid_WT, sequence_WT, WILD_TYPE_ON,
-                                    seqid_MT, sequence_MT, MUTATED_TYPE_ON)
-    
-    # add to main_window layout
-    main_window.main_widget.addWidget(sequence_view)
 
-    # switch to sequence view
-    main_window.main_widget.setCurrentWidget(sequence_view)
+    if not (WILD_TYPE_ON or MUTATED_TYPE_ON):
+        # call welcome view
+        from .welcome_view import WelcomeView
+        welcome_view = WelcomeView(main_window)
+        main_window.main_widget.addWidget(welcome_view)
+        main_window.main_widget.setCurrentWidget(welcome_view)
+    
+    else:
+        # call sequence view constructor
+        sequence_view = SequenceView(main_window, 
+                                        seqid_WT, sequence_WT, WILD_TYPE_ON,
+                                        seqid_MT, sequence_MT, MUTATED_TYPE_ON)
+        
+        # add to main_window layout
+        main_window.main_widget.addWidget(sequence_view)
+
+        # switch to sequence view
+        main_window.main_widget.setCurrentWidget(sequence_view)
 
 
 
