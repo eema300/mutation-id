@@ -59,7 +59,8 @@ class SequenceView(QWidget):
             # view area
             # add sequences to view area
             sequence_design = SequenceDesign(sequence_1=sequenceWT,
-                                             sequence_2=sequenceMT)
+                                             sequence_2=sequenceMT,
+                                             mutation=False)
             self.view_area.inner_widget_layout.addWidget(sequence_design)
             self.view_area.inner_widget_layout.addStretch(1)
             # summary
@@ -96,7 +97,8 @@ class SequenceView(QWidget):
                 # view area
                 # add sequences to view area
                 sequence_design = SequenceDesign(sequence_1=sequenceWT,
-                                                sequence_2=None)
+                                                sequence_2=None,
+                                                mutation=False)
                 self.view_area.inner_widget_layout.addWidget(sequence_design)
                 self.view_area.inner_widget_layout.addStretch(1)
                 # summary
@@ -129,7 +131,8 @@ class SequenceView(QWidget):
                 # view area
                 # add sequences to view area
                 sequence_design = SequenceDesign(sequence_1=None,
-                                                sequence_2=sequenceMT)
+                                                sequence_2=sequenceMT,
+                                                mutation=False)
                 self.view_area.inner_widget_layout.addWidget(sequence_design)
                 self.view_area.inner_widget_layout.addStretch(1)
                 # summary

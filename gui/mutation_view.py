@@ -4,7 +4,7 @@ from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
 from .view_caller import reset
-from logic import export_png, export_fasta
+from logic import export_png, export_csv
 
 class MutationView(QWidget):
     def __init__(self, main_window,
@@ -38,11 +38,11 @@ class MutationView(QWidget):
         export_png_button.clicked.connect(lambda: export_png(main_window, sequence_design.scene,
                                                              seqid_1, seqid_2))
         self.side_panel.side_panel_layout.addWidget(export_png_button)
-        export_fasta_button = QPushButton('Export As FASTA')
-        export_fasta_button.clicked.connect(lambda: export_fasta(main_window, 
+        export_csv_button = QPushButton('Export As CSV')
+        export_csv_button.clicked.connect(lambda: export_csv(main_window, 
                                                                  seqid_1, seqid_2,
                                                                  sequence_1_aligned, sequence_2_aligned))
-        self.side_panel.side_panel_layout.addWidget(export_fasta_button)
+        self.side_panel.side_panel_layout.addWidget(export_csv_button)
         reset_button = QPushButton('Reset')
         reset_button.clicked.connect(lambda: reset(main_window))
         self.side_panel.side_panel_layout.addWidget(reset_button)
@@ -50,7 +50,8 @@ class MutationView(QWidget):
         self.side_panel.setLayout(self.side_panel.side_panel_layout)
 
         sequence_design = SequenceDesign(sequence_1=sequence_1_aligned,
-                                         sequence_2=sequence_2_aligned)
+                                         sequence_2=sequence_2_aligned,
+                                         mutation=True)
         self.view_area.inner_widget_layout.addWidget(sequence_design)
         self.view_area.inner_widget_layout.addStretch(1)
         self.view_area.setLayout(self.view_area.inner_widget_layout)

@@ -53,7 +53,8 @@ class AlignmentView(QWidget):
         
         
         sequence_design = SequenceDesign(sequence_1=sequence_1_aligned,
-                                         sequence_2=sequence_2_aligned)
+                                         sequence_2=sequence_2_aligned,
+                                         mutation=False)
         self.view_area.inner_widget_layout.addWidget(sequence_design)
         self.view_area.inner_widget_layout.addStretch(1)
         self.view_area.setLayout(self.view_area.inner_widget_layout)
