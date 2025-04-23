@@ -4,6 +4,7 @@ from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
 from .view_caller import init_alignment_view, delete_sequence, reset
+from .stat_sum_area import StatSummary
 
 
 class SequenceView(QWidget):
@@ -57,13 +58,17 @@ class SequenceView(QWidget):
             self.side_panel.setLayout(self.side_panel.side_panel_layout)
             
             # view area
-            # add sequences to view area
+            # display sequences in a nice format
             sequence_design = SequenceDesign(sequence_1=sequenceWT,
                                              sequence_2=sequenceMT,
                                              mutation=False)
             self.view_area.inner_widget_layout.addWidget(sequence_design)
-            self.view_area.inner_widget_layout.addStretch(1)
+
             # summary
+            # stats summary table (and graphs....?)
+            stat_summary = StatSummary(sequenceWT, sequenceMT)
+            self.view_area.inner_widget_layout.addWidget(stat_summary)
+
             # set layout
             self.view_area.setLayout(self.view_area.inner_widget_layout)
             

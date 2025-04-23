@@ -55,7 +55,7 @@ class AlignmentView(QWidget):
         # combine side panel together
         self.side_panel.setLayout(self.side_panel.side_panel_layout)
         
-        
+        # display sequences in a nice format
         sequence_design = SequenceDesign(sequence_1=sequence_1_aligned,
                                          sequence_2=sequence_2_aligned,
                                          mutation=False)
