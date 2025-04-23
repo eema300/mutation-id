@@ -13,3 +13,6 @@ Mutation ID is a simple, user-friendly software for analyzing substitution, inse
 ## Authors
 * Emma Gomez
 * Steven Sanusi
+
+
+*this is a practice bioinformatics project*
