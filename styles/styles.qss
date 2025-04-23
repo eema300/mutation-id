@@ -32,3 +32,8 @@ QGraphicsView {
     border: 2px solid transparent;
     margin: 0px;
 }
+
+QTableView {
+    alternate-background-color: rgb(241, 241, 241);
+    background-color: rgb(255, 255, 255);
+}
