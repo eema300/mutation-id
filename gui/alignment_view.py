@@ -5,6 +5,7 @@ from .view_area import ViewArea
 from .sequence_design import SequenceDesign
 from .view_caller import init_mutation_view, reset
 from logic import export_png, export_fasta
+from .stat_sum_area import StatSummary
 
 class AlignmentView(QWidget):
     def __init__(self, main_window,
@@ -59,8 +60,14 @@ class AlignmentView(QWidget):
                                          sequence_2=sequence_2_aligned,
                                          mutation=False)
         self.view_area.inner_widget_layout.addWidget(sequence_design)
-        self.view_area.inner_widget_layout.addStretch(1)
+
+        # stats summary table (and graphs....?)
+        stat_summary = StatSummary(sequence_1_aligned, sequence_2_aligned)
+        self.view_area.inner_widget_layout.addWidget(stat_summary)
+
+
         self.view_area.setLayout(self.view_area.inner_widget_layout)
+
 
         # add child widgets and set main layout
         self.layout.addWidget(self.side_panel)
