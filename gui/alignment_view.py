@@ -12,6 +12,9 @@ class AlignmentView(QWidget):
                  seqid_2, sequence_2_aligned):
         super().__init__()
 
+        # set name so you can access it later
+        self.setObjectName('alignment_view')
+
         # main layout
         self.layout = QHBoxLayout()
 

@@ -191,3 +191,12 @@ def reset(main_window: QMainWindow):
 
     # switch to sequence view
     main_window.main_widget.setCurrentWidget(welcome_view)
+
+
+
+def go_back_to_alignment(main_window: QMainWindow):
+    for i in range(main_window.main_widget.count()):
+        widget = main_window.main_widget.widget(i)
+        
+        if widget.objectName() == 'alignment_view':
+            main_window.main_widget.setCurrentWidget(widget)
