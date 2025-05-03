@@ -6,6 +6,7 @@ from .sequence_design import SequenceDesign
 from .view_caller import reset, go_back_to_alignment
 from logic import export_png, export_csv
 from .stat_sum_area import StatSummary
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 
 class MutationView(QWidget):
     def __init__(self, main_window,
@@ -65,8 +66,8 @@ class MutationView(QWidget):
         self.view_area.inner_widget_layout.addWidget(sequence_design)
         
 
-        # stats summary table (and graphs....?)
-        stat_summary = StatSummary(sequence_1_aligned, sequence_2_aligned)
+        # stats summary table
+        stat_summary = StatSummary(sequence_1_aligned, sequence_2_aligned, True, seqid_1, seqid_2)
         self.view_area.inner_widget_layout.addWidget(stat_summary)
 
 

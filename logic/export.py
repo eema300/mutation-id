@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QGraphicsScene, QFileDialog, QMessageBox, QMainWindow
 from PyQt6.QtGui import QImage, QPainter
+import matplotlib.pyplot as plt
 from .loc_mutation import find_sub_mutation
 
 def export_png(main_window: QMainWindow, scene: QGraphicsScene, 

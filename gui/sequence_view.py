@@ -66,7 +66,7 @@ class SequenceView(QWidget):
 
             # summary
             # stats summary table (and graphs....?)
-            stat_summary = StatSummary(sequenceWT, sequenceMT)
+            stat_summary = StatSummary(sequenceWT, sequenceMT, False, seqidWT, seqidMT)
             self.view_area.inner_widget_layout.addWidget(stat_summary)
 
             # set layout
@@ -112,7 +112,7 @@ class SequenceView(QWidget):
 
             else: # MT_ON
                 # add load wt button to wt widget
-                load_wt_button = QPushButton("Load Wild Type FASTA")
+                load_wt_button = QPushButton("Load Reference FASTA")
                 load_wt_button.clicked.connect(lambda: init_sequence_view_WT(main_window))
                 self.side_panel.wt_widget_layout.addWidget(load_wt_button)
                 self.side_panel.wt_widget.setLayout(self.side_panel.wt_widget_layout)

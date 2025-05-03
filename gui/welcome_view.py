@@ -12,7 +12,7 @@ class WelcomeView(QWidget):
 
         # side panel
         self.side_panel = SidePanel()
-        load_wt_button = QPushButton("Load Wild Type FASTA")
+        load_wt_button = QPushButton("Load Reference FASTA")
         load_mutation_button = QPushButton("Load Mutated FASTA")
         load_wt_button.clicked.connect(lambda: init_sequence_view_WT(main_window))
         load_mutation_button.clicked.connect(lambda: init_sequence_view_MT(main_window))

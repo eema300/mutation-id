@@ -62,9 +62,9 @@ class AlignmentView(QWidget):
         self.view_area.inner_widget_layout.addWidget(sequence_design)
 
         # stats summary table (and graphs....?)
-        stat_summary = StatSummary(sequence_1_aligned, sequence_2_aligned)
+        stat_summary = StatSummary(sequence_1_aligned, sequence_2_aligned, False, seqid_1, seqid_2)
         self.view_area.inner_widget_layout.addWidget(stat_summary)
-
+        
 
         self.view_area.setLayout(self.view_area.inner_widget_layout)
 

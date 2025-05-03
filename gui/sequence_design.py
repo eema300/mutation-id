@@ -7,6 +7,7 @@ from logic import find_sub_mutation
 class SequenceDesign(QGraphicsView):
 
     cell_size = 40
+    cell_width = 30
 
     def __init__(self, sequence_1, sequence_2, mutation):
         super().__init__()
@@ -48,7 +49,7 @@ class SequenceDesign(QGraphicsView):
 
         for nucleotide in sequence:
             # calculate current position
-            col_pos = col * self.cell_size
+            col_pos = col * self.cell_width
             row_pos = row * self.cell_size
 
             # get color
@@ -58,7 +59,7 @@ class SequenceDesign(QGraphicsView):
                 color = self.nucleotide_colors.get(nucleotide, QColor('white'))
             
             # create shape at position
-            cell = QGraphicsRectItem(col_pos, row_pos, self.cell_size, self.cell_size)
+            cell = QGraphicsRectItem(col_pos, row_pos, self.cell_width, self.cell_size)
             # set color
             cell.setBrush(QBrush(color))
             # add shape
@@ -70,13 +71,10 @@ class SequenceDesign(QGraphicsView):
             else:
                 text = QGraphicsTextItem(nucleotide)
             # set text
-            text.setPos(col_pos + 10, row_pos + 10)
+            text.setPos(col_pos + 6.5, row_pos + 10)
             # add text
             self.scene.addItem(text)
 
             # increment column and helper index
             col += 1
             i += 1
-
-
-    # NEED TO USE find_sub_mutation TO UPDATE COLOR OF THOSE MUTATIONS IN MUTATION VIEW

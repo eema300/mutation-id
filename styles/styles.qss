@@ -37,3 +37,14 @@ QTableView {
     alternate-background-color: rgb(241, 241, 241);
     background-color: rgb(255, 255, 255);
 }
+
+#graph_header {
+    background-color: rgba(255, 215, 56, 0.49);
+}
+
+#graph_button {
+    background-color: transparent;
+    border-radius: 80px;
+    padding: 0px;
+    border: 2px solid transparent;
+}

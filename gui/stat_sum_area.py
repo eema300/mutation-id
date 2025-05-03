@@ -1,27 +1,33 @@
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QTableWidgetItem, QTableWidget, QAbstractItemView, QHeaderView
-from PyQt6.QtCore import Qt
-from logic import get_gc_content, get_base_proportion, find_repeats
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QTableWidgetItem, QTableWidget, QAbstractItemView, QHeaderView, QWidget
+from PyQt6.QtCore import Qt, QPoint
+from .graph_area import Graph
+from logic import get_gc_content, get_base_proportion, find_repeats, get_mutation_types
 
-class StatSummary(QFrame):
-    def __init__(self, sequence_wt, sequence_mt):
+class StatSummary(QWidget):
+    def __init__(self, sequence_wt, sequence_mt, mutation, seqid_wt, seqid_mt):
         super().__init__()
 
         self.inner_widget_layout = QHBoxLayout()
-        self.inner_widget_layout.setContentsMargins(10, 10, 10, 10)
+        self.inner_widget_layout.setContentsMargins(5, 5, 5, 5)
 
         summary = QFrame()
-        summary.setFixedWidth(370)
+        summary.setFixedWidth(1000)
         summary.setFrameShape(QFrame.Shape.Box)
         summary.setFrameShadow(QFrame.Shadow.Sunken)
-        summary.layout = QHBoxLayout()
+        summary_layout = QHBoxLayout()
 
         table = QTableWidget(summary)
         table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         table.setFixedWidth(340)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
 
-        table.setRowCount(15)
+        table.setRowCount(14)
         table.setColumnCount(3)
+
+        cell_height = table.verticalHeader().defaultSectionSize()
+        header_height = table.horizontalHeader().height()
+
+        table.setFixedHeight(2 + header_height + cell_height * 14)
 
         # length
         table.setItem(0, 0, QTableWidgetItem("GC Content"))
@@ -52,22 +58,29 @@ class StatSummary(QFrame):
         table.setItem(6, 1, QTableWidgetItem(find_repeats(sequence_wt)))
         table.setItem(6, 2, QTableWidgetItem(find_repeats(sequence_mt)))
 
+        # mutation types
+        if mutation:
+            mutation_types = get_mutation_types(sequence_wt, sequence_mt)
+            table.setItem(7, 0, QTableWidgetItem("Deletions"))
+            table.setItem(7, 2, QTableWidgetItem(str(mutation_types['deletion'])))
+            table.setItem(8, 0, QTableWidgetItem("Substitutions"))
+            table.setItem(8, 2, QTableWidgetItem(str(mutation_types['substitution'])))
+
         # colnames
-        table.setHorizontalHeaderLabels(['Summary', 'Wild Type', 'Mutated Type'])
+        table.setHorizontalHeaderLabels(['Summary', 'Reference', 'Mutated Type'])
         table.verticalHeader().setVisible(False)
         table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         table.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
 
         table.setAlternatingRowColors(True)
 
-        summary.layout.addWidget(table)
-        summary.setLayout(summary.layout)
+        self.graph = Graph(sequence_wt, sequence_mt, mutation, seqid_wt, seqid_mt)
+
+        summary_layout.addWidget(table)
+        summary_layout.addStretch(1)
+        summary_layout.addWidget(self.graph)
+        summary.setLayout(summary_layout)
 
         self.inner_widget_layout.addWidget(summary)
         self.inner_widget_layout.addStretch(1)
         self.setLayout(self.inner_widget_layout)
-
-
-
-
-# retrieve the stat summary info from the csv

@@ -12,7 +12,7 @@ class MainWindow(QMainWindow):
 
         # main window and layout
         self.setWindowTitle("mutation id")
-        self.setMinimumSize(1150, 650)
+        self.setMinimumSize(1312, 650)
         # stacked widget for switching between views
         self.main_widget = QStackedWidget()
         self.setCentralWidget(self.main_widget)

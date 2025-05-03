@@ -1,3 +1,5 @@
+from collections import Counter
+
 def get_gc_content(sequence):
     clean_sequence = sequence.replace('-', '')
     gc = 0
@@ -20,6 +22,12 @@ def get_base_proportion(sequence, symbol):
     proportion = base/float(len(clean_sequence)) * 100
 
     return f"{proportion:.2f}%"
+
+
+def get_base_proportions(sequence):
+    clean_sequence = sequence.replace('-', '')
+
+    return dict(Counter(clean_sequence))
 
 
 def find_repeats(sequence):
