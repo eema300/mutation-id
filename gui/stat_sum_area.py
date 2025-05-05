@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QTableWidgetItem, QTableWidget, QAbstractItemView, QHeaderView, QWidget
 from PyQt6.QtCore import Qt, QPoint
-from .graph_area import Graph
+from .graph_area import Graph_Area
 from logic import get_gc_content, get_base_proportion, find_repeats, get_mutation_types
 
 class StatSummary(QWidget):
-    def __init__(self, sequence_wt, sequence_mt, mutation, seqid_wt, seqid_mt):
+    def __init__(self, main_window, sequence_wt, sequence_mt, mutation, seqid_wt, seqid_mt):
         super().__init__()
 
         self.inner_widget_layout = QHBoxLayout()
@@ -74,7 +74,7 @@ class StatSummary(QWidget):
 
         table.setAlternatingRowColors(True)
 
-        self.graph = Graph(sequence_wt, sequence_mt, mutation, seqid_wt, seqid_mt)
+        self.graph = Graph_Area(main_window, sequence_wt, sequence_mt, mutation, seqid_wt, seqid_mt)
 
         summary_layout.addWidget(table)
         summary_layout.addStretch(1)

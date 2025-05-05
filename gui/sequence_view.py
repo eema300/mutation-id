@@ -5,6 +5,7 @@ from .view_area import ViewArea
 from .sequence_design import SequenceDesign
 from .view_caller import init_alignment_view, delete_sequence, reset
 from .stat_sum_area import StatSummary
+from logic import export_png_all_graphs
 
 
 class SequenceView(QWidget):
@@ -12,6 +13,9 @@ class SequenceView(QWidget):
                  seqidWT, sequenceWT, WT_ON,
                  seqidMT, sequenceMT, MT_ON):
         super().__init__()
+
+        # set name so you can access it later
+        self.setObjectName('sequence_view')
 
         # main layout
         self.layout = QHBoxLayout()
@@ -24,7 +28,7 @@ class SequenceView(QWidget):
 
 
         if WT_ON and MT_ON:
-            # side panel
+            # upper half of side panel
             # add xwt button to wt widget, push to left
             delete_wt_button = QPushButton('x')
             delete_wt_button.clicked.connect(lambda: delete_sequence(main_window, 0))
@@ -49,8 +53,16 @@ class SequenceView(QWidget):
             alignment_button = QPushButton("Align Sequences")
             alignment_button.clicked.connect(lambda: init_alignment_view(main_window))
             self.side_panel.side_panel_layout.addWidget(alignment_button)
-            # add reset button
+
+            # lower half of side panel
             self.side_panel.side_panel_layout.addStretch(1)
+            # export all graphs button
+            export_all_graphs_button = QPushButton('Export All Graphs')
+            export_all_graphs_button.clicked.connect(lambda: export_png_all_graphs(main_window,
+                                                                                   stat_summary.graph.graphs,
+                                                                                   seqidWT, seqidMT))
+            self.side_panel.side_panel_layout.addWidget(export_all_graphs_button)
+            # add reset button
             reset_button = QPushButton('Reset')
             reset_button.clicked.connect(lambda: reset(main_window))
             self.side_panel.side_panel_layout.addWidget(reset_button)
@@ -66,7 +78,7 @@ class SequenceView(QWidget):
 
             # summary
             # stats summary table (and graphs....?)
-            stat_summary = StatSummary(sequenceWT, sequenceMT, False, seqidWT, seqidMT)
+            stat_summary = StatSummary(main_window, sequenceWT, sequenceMT, False, seqidWT, seqidMT)
             self.view_area.inner_widget_layout.addWidget(stat_summary)
 
             # set layout

@@ -3,8 +3,8 @@ from PyQt6.QtCore import Qt
 from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
-from .view_caller import init_mutation_view, reset
-from logic import export_png, export_fasta
+from .view_caller import init_mutation_view, reset, go_back_to_view
+from logic import export_png, export_fasta, export_png_all_graphs
 from .stat_sum_area import StatSummary
 
 class AlignmentView(QWidget):
@@ -34,21 +34,34 @@ class AlignmentView(QWidget):
         self.side_panel.mt_widget_layout.addWidget(seqid_2_label)
         self.side_panel.mt_widget.setLayout(self.side_panel.mt_widget_layout)
         
+        back_button = QPushButton('Back')
+        back_button.clicked.connect(lambda: go_back_to_view(main_window, view='sequence_view'))
+        self.side_panel.side_panel_layout.addWidget(back_button)
+
         id_mutations_button = QPushButton('Highlight Mutations')
         id_mutations_button.clicked.connect(lambda: init_mutation_view(main_window))
         self.side_panel.side_panel_layout.addWidget(id_mutations_button)
+
+
         self.side_panel.side_panel_layout.addStretch(1)
 
-
-        export_png_button = QPushButton('Export As PNG')
+        export_png_button = QPushButton('Export Alignment As PNG')
         export_png_button.clicked.connect(lambda: export_png(main_window, sequence_design.scene,
                                                              seqid_1, seqid_2))
         self.side_panel.side_panel_layout.addWidget(export_png_button)
-        export_fasta_button = QPushButton('Export As FASTA')
+        export_fasta_button = QPushButton('Export Alignment As FASTA')
         export_fasta_button.clicked.connect(lambda: export_fasta(main_window, 
                                                                  seqid_1, seqid_2,
                                                                  sequence_1_aligned, sequence_2_aligned))
         self.side_panel.side_panel_layout.addWidget(export_fasta_button)
+
+        # export all graphs button
+        export_all_graphs_button = QPushButton('Export All Graphs')
+        export_all_graphs_button.clicked.connect(lambda: export_png_all_graphs(main_window,
+                                                                                stat_summary.graph.graphs,
+                                                                                seqid_1, seqid_2))
+        self.side_panel.side_panel_layout.addWidget(export_all_graphs_button)
+
         reset_button = QPushButton('Reset')
         reset_button.clicked.connect(lambda: reset(main_window))
         self.side_panel.side_panel_layout.addWidget(reset_button)
@@ -62,7 +75,7 @@ class AlignmentView(QWidget):
         self.view_area.inner_widget_layout.addWidget(sequence_design)
 
         # stats summary table (and graphs....?)
-        stat_summary = StatSummary(sequence_1_aligned, sequence_2_aligned, False, seqid_1, seqid_2)
+        stat_summary = StatSummary(main_window, sequence_1_aligned, sequence_2_aligned, False, seqid_1, seqid_2)
         self.view_area.inner_widget_layout.addWidget(stat_summary)
         
 

@@ -18,31 +18,7 @@ sequence_WT_aligned = ""
 sequence_MT_aligned = ""
 
 
-# def init_sequence_view(main_window: QMainWindow):
-#     from .sequence_view import SequenceView
-
-#     on_load = load_fasta_file(main_window)
-    
-#     if on_load:
-#         global seqid, sequence
-#         seqid, sequence = on_load
-            
-
-#         # call sequence view constructor
-#         sequence_view = SequenceView(main_window, 
-#                                      seqid, sequence, WILD_TYPE_ON,
-#                                      seqid, sequence, MUTATED_TYPE_ON)
-        
-#         # add to main_window layout
-#         main_window.main_widget.addWidget(sequence_view)
-
-#         # switch to sequence view
-#         main_window.main_widget.setCurrentWidget(sequence_view)
-
-
-
 def init_sequence_view_WT(main_window: QMainWindow):
-    from .sequence_view import SequenceView
     global WILD_TYPE_ON
 
     on_load = load_fasta_file(main_window)
@@ -52,6 +28,7 @@ def init_sequence_view_WT(main_window: QMainWindow):
         global seqid_WT, sequence_WT
         seqid_WT, sequence_WT = on_load
 
+        from .sequence_view import SequenceView
         # call sequence view constructor
         sequence_view = SequenceView(main_window, 
                                     seqid_WT, sequence_WT, WILD_TYPE_ON,
@@ -66,7 +43,6 @@ def init_sequence_view_WT(main_window: QMainWindow):
 
 
 def init_sequence_view_MT(main_window: QMainWindow):
-    from .sequence_view import SequenceView
     global MUTATED_TYPE_ON 
     
     on_load = load_fasta_file(main_window)
@@ -76,6 +52,7 @@ def init_sequence_view_MT(main_window: QMainWindow):
         global seqid_MT, sequence_MT
         seqid_MT, sequence_MT = on_load
 
+        from .sequence_view import SequenceView
         # call sequence view constructor
         sequence_view = SequenceView(main_window, 
                                     seqid_WT, sequence_WT, WILD_TYPE_ON,
@@ -90,40 +67,46 @@ def init_sequence_view_MT(main_window: QMainWindow):
 
 
 def init_alignment_view(main_window: QMainWindow):
-    from .alignment_view import AlignmentView
-
     on_align = align_sequences(sequence_WT, sequence_MT)
 
     if on_align:
         global sequence_WT_aligned, sequence_MT_aligned
         sequence_WT_aligned, sequence_MT_aligned = on_align
 
-        # call alignment viewer
-        alignment_view = AlignmentView(main_window, 
-                                       seqid_WT, sequence_WT_aligned, 
-                                       seqid_MT, sequence_MT_aligned)
+        # check to see if already exists in stacked widget
+        if view_exists(main_window, view='alignment_view'):
+            go_back_to_view(main_window, view='alignment_view')
+        else:
+            from .alignment_view import AlignmentView
+            # call alignment viewer
+            alignment_view = AlignmentView(main_window, 
+                                        seqid_WT, sequence_WT_aligned, 
+                                        seqid_MT, sequence_MT_aligned)
 
-        # add to main_window layout
-        main_window.main_widget.addWidget(alignment_view)
+            # add to main_window layout
+            main_window.main_widget.addWidget(alignment_view)
 
-        # switch to alignment view
-        main_window.main_widget.setCurrentWidget(alignment_view)
+            # switch to alignment view
+            main_window.main_widget.setCurrentWidget(alignment_view)
 
 
 
 def init_mutation_view(main_window: QMainWindow):
-    from .mutation_view import MutationView
+    # check to see if already exists in stacked widget
+    if view_exists(main_window, view='mutation_view'):
+        go_back_to_view(main_window, view='mutation_view')
+    else:
+        from .mutation_view import MutationView
+        # call mutation viewer
+        mutation_view = MutationView(main_window,
+                                    seqid_WT, sequence_WT_aligned, 
+                                    seqid_MT, sequence_MT_aligned)
+        
+        # add to main_window layout
+        main_window.main_widget.addWidget(mutation_view)
 
-    # call mutation viewer
-    mutation_view = MutationView(main_window,
-                                 seqid_WT, sequence_WT_aligned, 
-                                 seqid_MT, sequence_MT_aligned)
-    
-    # add to main_window layout
-    main_window.main_widget.addWidget(mutation_view)
-
-    # switch to mutation view
-    main_window.main_widget.setCurrentWidget(mutation_view)
+        # switch to mutation view
+        main_window.main_widget.setCurrentWidget(mutation_view)
 
 
 
@@ -147,11 +130,10 @@ def delete_sequence(main_window: QMainWindow, state):
         return
 
     if not (WILD_TYPE_ON or MUTATED_TYPE_ON):
-        # call welcome view
-        from .welcome_view import WelcomeView
-        welcome_view = WelcomeView(main_window)
-        main_window.main_widget.addWidget(welcome_view)
-        main_window.main_widget.setCurrentWidget(welcome_view)
+        # switch to welcome view
+        go_back_to_view(main_window, 'welcome_view')
+        # delete sequence view
+        delete_view(main_window, 'sequence_view')
     
     else:
         # call sequence view constructor
@@ -182,21 +164,53 @@ def reset(main_window: QMainWindow):
     sequence_MT_aligned = ""
 
     # go back to welcome view
-    from .welcome_view import WelcomeView
+    go_back_to_view(main_window, view='welcome_view')
 
-    welcome_view = WelcomeView(main_window)
-
-    # add to main_window layout
-    main_window.main_widget.addWidget(welcome_view)
-
-    # switch to sequence view
-    main_window.main_widget.setCurrentWidget(welcome_view)
+    # delete all other views
+    delete_all_views(main_window)
 
 
 
-def go_back_to_alignment(main_window: QMainWindow):
+def go_back_to_view(main_window: QMainWindow, view):
+    for i in range(main_window.main_widget.count()):
+        widget = main_window.main_widget.widget(i)
+        print(widget)
+        
+        if widget.objectName() == view:
+            main_window.main_widget.setCurrentWidget(widget)
+    print(main_window.main_widget.count())
+
+
+
+def view_exists(main_window: QMainWindow, view):
+    exist = False
+
     for i in range(main_window.main_widget.count()):
         widget = main_window.main_widget.widget(i)
         
-        if widget.objectName() == 'alignment_view':
-            main_window.main_widget.setCurrentWidget(widget)
+        if widget.objectName() == view:
+            exist = True
+    
+    return exist
+
+
+
+def delete_view(main_window: QMainWindow, view):
+    for i in range(main_window.main_widget.count()):
+        widget = main_window.main_widget.widget(i)
+
+        if widget.objectName() == view:
+            main_window.main_widget.removeWidget(widget)
+
+
+
+def delete_all_views(main_window:QMainWindow):
+    for i in reversed(range(main_window.main_widget.count())):
+        widget = main_window.main_widget.widget(i)
+        
+        if widget is None:
+            continue
+        if widget.objectName() != 'welcome_view':
+            main_window.main_widget.removeWidget(widget)
+    
+    print('after deleting:', main_window.main_widget.count())

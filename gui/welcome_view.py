@@ -7,6 +7,9 @@ class WelcomeView(QWidget):
     def __init__(self, main_window):
         super().__init__()
 
+        # set name so you can access it later
+        self.setObjectName('welcome_view')
+
         # main layout
         self.layout = QHBoxLayout()
 

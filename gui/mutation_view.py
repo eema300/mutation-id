@@ -3,8 +3,8 @@ from PyQt6.QtCore import Qt
 from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
-from .view_caller import reset, go_back_to_alignment
-from logic import export_png, export_csv
+from .view_caller import reset, go_back_to_view
+from logic import export_png, export_csv, export_png_all_graphs
 from .stat_sum_area import StatSummary
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 
@@ -13,6 +13,9 @@ class MutationView(QWidget):
                  seqid_1, sequence_1_aligned, 
                  seqid_2, sequence_2_aligned):
         super().__init__()
+
+        # set name so you can access it later
+        self.setObjectName('mutation_view')
 
         # main layout
         self.layout = QHBoxLayout()
@@ -37,21 +40,29 @@ class MutationView(QWidget):
 
         # back to alignment view button
         back_button = QPushButton('Back')
-        back_button.clicked.connect(lambda: go_back_to_alignment(main_window))
+        back_button.clicked.connect(lambda: go_back_to_view(main_window, view='alignment_view'))
         self.side_panel.side_panel_layout.addWidget(back_button)
 
         self.side_panel.side_panel_layout.addStretch(1)
 
         # exporting buttons
-        export_png_button = QPushButton('Export As PNG')
+        export_png_button = QPushButton('Export Mutations As PNG')
         export_png_button.clicked.connect(lambda: export_png(main_window, sequence_design.scene,
                                                              seqid_1, seqid_2))
         self.side_panel.side_panel_layout.addWidget(export_png_button)
-        export_csv_button = QPushButton('Export As CSV')
+        export_csv_button = QPushButton('Export Mutations As CSV')
         export_csv_button.clicked.connect(lambda: export_csv(main_window, 
                                                                  seqid_1, seqid_2,
                                                                  sequence_1_aligned, sequence_2_aligned))
         self.side_panel.side_panel_layout.addWidget(export_csv_button)
+        
+        # export all graphs button
+        export_all_graphs_button = QPushButton('Export All Graphs')
+        export_all_graphs_button.clicked.connect(lambda: export_png_all_graphs(main_window,
+                                                                                stat_summary.graph.graphs,
+                                                                                seqid_1, seqid_2))
+        self.side_panel.side_panel_layout.addWidget(export_all_graphs_button)
+        
         reset_button = QPushButton('Reset')
         reset_button.clicked.connect(lambda: reset(main_window))
         self.side_panel.side_panel_layout.addWidget(reset_button)
@@ -67,7 +78,7 @@ class MutationView(QWidget):
         
 
         # stats summary table
-        stat_summary = StatSummary(sequence_1_aligned, sequence_2_aligned, True, seqid_1, seqid_2)
+        stat_summary = StatSummary(main_window, sequence_1_aligned, sequence_2_aligned, True, seqid_1, seqid_2)
         self.view_area.inner_widget_layout.addWidget(stat_summary)
 
 

@@ -86,3 +86,50 @@ def export_csv(main_window: QMainWindow,
         
         except Exception as e:
             QMessageBox(main_window, "Error", f"An unexpected error occured {e}")
+
+
+def export_png_graph(main_window: QMainWindow, graph):
+    # set filename
+    graph_name = graph.objectName()
+    filename = ''.join([graph_name, '.png'])
+    
+    # allow user to change filename and location to save
+    pathname, _ = QFileDialog.getSaveFileName(None, 
+                                                f"Save {graph_name}", 
+                                                filename, 
+                                                "PNG Files (*.png)")
+    if not pathname:
+        return
+    
+    try:
+        graph.savefig(pathname)
+    
+    except Exception as e:
+        QMessageBox(main_window, "Error", f"An unexpected error occured {e}")
+
+
+def export_png_all_graphs(main_window: QMainWindow, graphs,
+                          seqid_WT, seqid_MT):
+    # graph names
+    graph_names = [''.join([seqid_WT, '_nucleotide_counts']),
+                   ''.join([seqid_MT, '_nucleotide_counts']),
+                   'mutation_density']
+
+    # set filenames
+    filenames = [''.join([graph_name, '.png']) for graph_name in graph_names]
+    
+    # iterate through each graph and save
+    for fig, graph_name, filename in zip(graphs, graph_names, filenames):
+        # allow user to change filename and location to save
+        pathname, _ = QFileDialog.getSaveFileName(None, 
+                                                  f"Save {graph_name}", 
+                                                  filename, 
+                                                  "PNG Files (*.png)")
+        if not pathname:
+            return
+        
+        try:
+            fig.savefig(pathname)
+        
+        except Exception as e:
+            QMessageBox(main_window, "Error", f"An unexpected error occured {e}")

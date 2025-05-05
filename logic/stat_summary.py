@@ -27,7 +27,7 @@ def get_base_proportion(sequence, symbol):
 def get_base_proportions(sequence):
     clean_sequence = sequence.replace('-', '')
 
-    return dict(Counter(clean_sequence))
+    return dict(sorted(Counter(clean_sequence).items()))
 
 
 def find_repeats(sequence):
