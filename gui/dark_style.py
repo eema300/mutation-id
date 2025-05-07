@@ -1,6 +1,7 @@
+dark_stylesheet = """
 QPushButton {
-    background-color: #383B42;
-    color: white;
+    background-color: #acadac;
+    color: black;
     font-size: 14px;
     border-radius: 8px;
     padding: 8px;
@@ -8,40 +9,35 @@ QPushButton {
 }
 
 QPushButton:hover {
-    background-color:rgb(31, 32, 36);
-    border: 2px solid rgb(0, 0, 0);
+    background-color: #c7c9c7;
+    border: 2px solid #b6b8b6;
 }
 
 QLabel {
-    color: #383B42;
+    color: #acadac;
     font-size: 14px;
     border-radius: 8px;
     padding: 8px;
-    border: 2px solid #000000;
+    border: 2px solid #acadac;
     font: bold;
 }
 
 QMainWindow {
-    background-color:rgb(195, 195, 195);
+    background-color: #383B42;
 }
 
 ViewArea {
     padding: 0px;
-    background-color:rgb(226, 226, 226);
+    background-color: #5f6166;
 }
 
 SidePanel {
-    background-color:rgb(195, 195, 195);
+    background-color: #383B42;
 }
 
 QGraphicsView {
     border: 2px solid transparent;
     margin: 0px;
-}
-
-QTableView {
-    alternate-background-color: rgb(241, 241, 241);
-    background-color: rgb(255, 255, 255);
 }
 
 #graph_header {
@@ -61,3 +57,4 @@ QToolTip {
     font-size: 12px;
     padding: 1px;
 }
+"""

@@ -83,7 +83,7 @@ class Table(QTableWidget):
         for col in range(self.columnCount()):
             item = self.horizontalHeaderItem(col)
             item.setFont(font)
-            item.setBackground(QBrush(QColor("#383b42")))
+            item.setBackground(QBrush(QColor("#acadac")))
             item.setForeground(QBrush(QColor("white")))
 
         self.verticalHeader().setVisible(False)

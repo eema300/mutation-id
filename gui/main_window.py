@@ -1,11 +1,8 @@
-# need a state variable that changes every time
-# you add a sequence using the file loader
-# it needs to go from 0 to 1 to 2 and then decrease
-# as such when user deletes a sequence
-
+import os
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget
 from .welcome_view import WelcomeView
 from .menu_bar import MenuBar
+from .dark_style import dark_stylesheet
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -27,3 +24,12 @@ class MainWindow(QMainWindow):
         # menu bar
         menu_bar = MenuBar(self)
         self.setMenuBar(menu_bar)
+
+    def set_dark_mode(self):
+        self.setStyleSheet(dark_stylesheet)
+
+    def set_light_mode(self):
+        qss_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'styles', 'styles.qss')
+        
+        with open(qss_path, 'r') as file:
+            self.setStyleSheet(file.read())
