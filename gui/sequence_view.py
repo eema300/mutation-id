@@ -83,7 +83,7 @@ class SequenceView(QWidget):
             self.view_area.inner_widget_layout.addWidget(self.sequence_design)
 
             # summary
-            # stats summary table (and graphs....?)
+            # stats summary table
             stat_summary = StatSummary(main_window, sequenceWT, sequenceMT, False, seqidWT, seqidMT)
             self.view_area.inner_widget_layout.addWidget(stat_summary)
 

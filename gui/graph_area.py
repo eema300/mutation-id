@@ -3,10 +3,7 @@ from .graph_button import GraphButton
 from .graph import Graph
 from logic import export_png_graph
 
-# use a stacked widget to swtch between graphs when
-# arrow buttons are pushed
-# this means you need to name the graph objects to 
-# be able to select for stack change
+
 PATH = '/Users/emmagomez/code/cpsc362/mutation-id/assets/'
 PREV_BUTTON = 'left_arrow.png'
 NEXT_BUTTON = 'right_arrow.png'

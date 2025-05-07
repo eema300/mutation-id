@@ -1,8 +1,6 @@
 import math
-# finds substitution mutations
 # input sequences must be aligned at this point
-# sequence 1 -> wild type
-# sequence 2 -> mutated
+
 
 # returns array of positions of substitution mutations in the mutated sequence
 def find_sub_mutation(sequence_1, sequence_2):
