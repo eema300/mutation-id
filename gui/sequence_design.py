@@ -21,7 +21,6 @@ class SequenceDesign(QGraphicsView):
         }
 
         if mutation:
-            self.nucleotide_colors['-'] = QColor('#ff7878')
             self.sub_mutation_positions = find_sub_mutation(sequence_1, sequence_2)
 
         self.scene = QGraphicsScene(self)
@@ -33,10 +32,10 @@ class SequenceDesign(QGraphicsView):
 
         # only display loaded sequences
         if sequence_1:
-            self.build_seq_graphic(sequence_1, 0.1, mutation=False)
+            self.build_seq_graphic(sequence_1, 0.05, mutation=False)
             
         if sequence_2:
-            self.build_seq_graphic(sequence_2, 1.25, mutation)
+            self.build_seq_graphic(sequence_2, 1.2, mutation)
 
         self.scene.setSceneRect(0, 0, self.scene.sceneRect().width() + 20, 105)
 
@@ -44,7 +43,7 @@ class SequenceDesign(QGraphicsView):
     def build_seq_graphic(self, sequence, row, mutation):
         # for calculating next cell placement
         col = 0.25
-        # helper index for using the find_sub_mutation function
+        # helper index for using the find_sub_mutation function and position tooltip
         i = 0
 
         for nucleotide in sequence:
@@ -53,7 +52,7 @@ class SequenceDesign(QGraphicsView):
             row_pos = row * self.cell_size
 
             # get color
-            if mutation and i in self.sub_mutation_positions:
+            if mutation and (i in self.sub_mutation_positions or nucleotide == '-'):
                 color = QColor('#ff7878')
             else:
                 color = self.nucleotide_colors.get(nucleotide, QColor('white'))
@@ -67,10 +66,11 @@ class SequenceDesign(QGraphicsView):
 
             # get text
             if nucleotide == '-':
-                text = QGraphicsTextItem('')
+                text = QGraphicsTextItem(' ')
             else:
                 text = QGraphicsTextItem(nucleotide)
             # set text
+            text.setToolTip(f"position: {i+1}")
             text.setPos(col_pos + 6.5, row_pos + 10)
             # add text
             self.scene.addItem(text)
@@ -78,3 +78,63 @@ class SequenceDesign(QGraphicsView):
             # increment column and helper index
             col += 1
             i += 1
+
+
+    def highlight_mutations(self, sequence, positions):
+        for i in positions:
+
+            # get nucleotide character
+            nucleotide = sequence[i]
+
+            # cel cell dimensions
+            col_pos = (i + 0.25) * self.cell_width
+            row_pos = 1.2 * self.cell_size
+
+            # draw the cell
+            cell = QGraphicsRectItem(col_pos, row_pos, self.cell_width, self.cell_size)
+            # set color
+            cell.setBrush(QBrush(QColor('black')))
+            self.scene.addItem(cell)
+
+            # get text
+            if nucleotide == '-':
+                text = QGraphicsTextItem(' ')
+                text.setDefaultTextColor(QColor('white'))
+            else:
+                text = QGraphicsTextItem(nucleotide)
+                text.setDefaultTextColor(QColor('white'))
+            # set text
+            text.setToolTip(f"position: {i+1}")
+            text.setPos(col_pos + 6.5, row_pos + 10)
+            # add text
+            self.scene.addItem(text)
+
+
+    def clear_highlight(self, sequence, positions):
+        for i in positions:
+
+            # get nucleotide character
+            nucleotide = sequence[i]
+
+            # cel cell dimensions
+            col_pos = (i + 0.25) * self.cell_width
+            row_pos = 1.2 * self.cell_size
+
+            # draw the cell
+            cell = QGraphicsRectItem(col_pos, row_pos, self.cell_width, self.cell_size)
+            # set color
+            cell.setBrush(QBrush(QColor('#ff7878')))
+            self.scene.addItem(cell)
+
+            # get text
+            if nucleotide == '-':
+                text = QGraphicsTextItem(' ')
+                text.setDefaultTextColor(QColor('black'))
+            else:
+                text = QGraphicsTextItem(nucleotide)
+                text.setDefaultTextColor(QColor('black'))
+            # set text
+            text.setToolTip(f"position: {i+1}")
+            text.setPos(col_pos + 6.5, row_pos + 10)
+            # add text
+            self.scene.addItem(text)

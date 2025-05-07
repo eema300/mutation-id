@@ -14,7 +14,37 @@ def find_sub_mutation(sequence_1, sequence_2):
 
     for i in range(shortest_sequence_length):
         # found substitution mutation
-        if sequence_1[i] != sequence_2[i] and sequence_2[i] != '-':
+        if sequence_1[i] != sequence_2[i] and sequence_2[i] != '-' and sequence_1[i] != 'N' and sequence_1[i] != '-':
+            positions.append(i)
+
+    return positions
+
+
+def find_insertion_mutations(sequence_1, sequence_2):
+    n = len(sequence_1)
+    m = len(sequence_2)
+    shortest_sequence_length = n if n <= m else m
+
+    positions = []
+
+    for i in range(shortest_sequence_length):
+        # found insertion mutation
+        if sequence_1[i] != sequence_2[i] and sequence_1[i] == '-':
+            positions.append(i)
+
+    return positions
+
+
+def find_deletion_mutations(sequence_1, sequence_2):
+    n = len(sequence_1)
+    m = len(sequence_2)
+    shortest_sequence_length = n if n <= m else m
+
+    positions = []
+
+    for i in range(shortest_sequence_length):
+        # found insertion mutation
+        if sequence_1[i] != sequence_2[i] and sequence_2[i] == '-':
             positions.append(i)
 
     return positions
@@ -68,10 +98,13 @@ def get_mutation_types(sequence_1, sequence_2):
     shortest_sequence_length = n if n <= m else m
 
     mutation_types = {'deletion': 0,
-                      'substitution': 0}
+                      'substitution': 0,
+                      'insertion': 0}
 
     for i in range(shortest_sequence_length):
-        if sequence_1[i] != sequence_2[i] and sequence_2[i] == '-':
+        if sequence_1[i] == '-':
+            mutation_types['insertion'] += 1
+        elif sequence_1[i] != sequence_2[i] and sequence_2[i] == '-':
             mutation_types['deletion'] += 1
         elif sequence_1[i] != sequence_2[i] and sequence_2[i] != '-':
             mutation_types['substitution'] += 1

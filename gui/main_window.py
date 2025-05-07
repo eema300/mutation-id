@@ -5,6 +5,7 @@
 
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget
 from .welcome_view import WelcomeView
+from .menu_bar import MenuBar
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -12,7 +13,7 @@ class MainWindow(QMainWindow):
 
         # main window and layout
         self.setWindowTitle("mutation id")
-        self.setMinimumSize(1312, 650)
+        self.setMinimumSize(1275, 650)
         # stacked widget for switching between views
         self.main_widget = QStackedWidget()
         self.setCentralWidget(self.main_widget)
@@ -24,15 +25,5 @@ class MainWindow(QMainWindow):
         self.main_widget.addWidget(welcome_view)
 
         # menu bar
-        # menu_bar = self.menuBar()
-        # file_menu = menu_bar.addMenu("File")
-        # run_menu = menu_bar.addMenu("Run")
-        # load_wt_action = QAction("Load WT FASTA", self)
-        # load_wt_action.triggered.connect(lambda: init_sequence_view(self))
-        # load_mutation_action = QAction("Load Mutated FASTA", self)
-        # load_mutation_action.triggered.connect(lambda: init_sequence_view(self))
-        # #alignment_action = QAction("Run Alignment", self)
-        # # alignment_action.triggered.connect(self.run_alignment)
-        # file_menu.addAction(load_wt_action)
-        # file_menu.addAction(load_mutation_action)
-        # # run_menu.addAction(alignment_action)
+        menu_bar = MenuBar(self)
+        self.setMenuBar(menu_bar)

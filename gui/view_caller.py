@@ -128,6 +128,9 @@ def delete_sequence(main_window: QMainWindow, state):
 
     else:
         return
+    
+    # delete the other views from the stack so it doesn't leave traces
+    delete_most_views(main_window)
 
     if not (WILD_TYPE_ON or MUTATED_TYPE_ON):
         # switch to welcome view
@@ -174,11 +177,11 @@ def reset(main_window: QMainWindow):
 def go_back_to_view(main_window: QMainWindow, view):
     for i in range(main_window.main_widget.count()):
         widget = main_window.main_widget.widget(i)
-        print(widget)
         
+        if widget is None:
+            continue
         if widget.objectName() == view:
             main_window.main_widget.setCurrentWidget(widget)
-    print(main_window.main_widget.count())
 
 
 
@@ -188,6 +191,8 @@ def view_exists(main_window: QMainWindow, view):
     for i in range(main_window.main_widget.count()):
         widget = main_window.main_widget.widget(i)
         
+        if widget is None:
+            continue
         if widget.objectName() == view:
             exist = True
     
@@ -199,6 +204,8 @@ def delete_view(main_window: QMainWindow, view):
     for i in range(main_window.main_widget.count()):
         widget = main_window.main_widget.widget(i)
 
+        if widget is None:
+            continue
         if widget.objectName() == view:
             main_window.main_widget.removeWidget(widget)
 
@@ -212,5 +219,14 @@ def delete_all_views(main_window:QMainWindow):
             continue
         if widget.objectName() != 'welcome_view':
             main_window.main_widget.removeWidget(widget)
-    
-    print('after deleting:', main_window.main_widget.count())
+
+
+
+def delete_most_views(main_window:QMainWindow):
+    for i in reversed(range(main_window.main_widget.count())):
+        widget = main_window.main_widget.widget(i)
+        
+        if widget is None:
+            continue
+        if widget.objectName() != 'welcome_view' and widget.objectName() != 'sequence_view':
+            main_window.main_widget.removeWidget(widget)

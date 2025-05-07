@@ -16,7 +16,9 @@ class WelcomeView(QWidget):
         # side panel
         self.side_panel = SidePanel()
         load_wt_button = QPushButton("Load Reference FASTA")
+        load_wt_button.setToolTip("Open a FASTA file with the reference sequence")
         load_mutation_button = QPushButton("Load Mutated FASTA")
+        load_mutation_button.setToolTip("Open a FASTA file with the mutated sequence")
         load_wt_button.clicked.connect(lambda: init_sequence_view_WT(main_window))
         load_mutation_button.clicked.connect(lambda: init_sequence_view_MT(main_window))
         self.side_panel.wt_widget_layout.addWidget(load_wt_button)

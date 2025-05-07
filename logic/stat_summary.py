@@ -26,8 +26,14 @@ def get_base_proportion(sequence, symbol):
 
 def get_base_proportions(sequence):
     clean_sequence = sequence.replace('-', '')
+    
+    # sort the dictionary and put the N counts at the end
+    counts = dict(sorted(Counter(clean_sequence).items()))
+    if 'N' in counts:
+        counts_N = counts.pop('N')
+        counts['N'] = counts_N
 
-    return dict(sorted(Counter(clean_sequence).items()))
+    return counts
 
 
 def find_repeats(sequence):

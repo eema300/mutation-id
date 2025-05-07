@@ -12,7 +12,7 @@ class Graph():
             counts = get_base_proportions(sequence)
             bases = list(counts.keys())
             num_bases = list(counts.values())
-            colors = ['#ff44fc', '#fffd54', '#99ca3e', '#64b9fb']
+            colors = ['#ff44fc', '#fffd54', '#99ca3e', '#64b9fb', '#c0c0c0']
 
             self.ax.bar(bases, num_bases, color=colors, edgecolor='#000000')
             self.ax.set_yticks(range(0, max(num_bases) + 20, 20))
