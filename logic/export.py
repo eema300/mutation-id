@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QGraphicsScene, QFileDialog, QMessageBox, QMainWindow
 from PyQt6.QtGui import QImage, QPainter
 import matplotlib.pyplot as plt
-from .loc_mutation import find_sub_mutation
+from .loc_mutation import loc_mutation_types
 
 def export_png(main_window: QMainWindow, scene: QGraphicsScene, 
                seqid_WT, seqid_MT):
@@ -57,21 +57,13 @@ def export_csv(main_window: QMainWindow,
                aligned_sequence_WT, aligned_sequence_MT):
     
     # get positions
-    positions = find_sub_mutation(aligned_sequence_WT, aligned_sequence_MT)
-    for i in range(len(aligned_sequence_MT)):
-        if aligned_sequence_MT[i] == '-':
-            positions.append(i)
-
-
+    positions = loc_mutation_types(aligned_sequence_WT, aligned_sequence_MT)
+    
     if positions:
-        # sort the list in ascending order to make for a neater csv
-        positions.sort()
-
         # write csv
-        csv = 'base, position\n'
+        csv = 'base, position, type\n'
         for position in positions:
-            csv += ','.join([aligned_sequence_MT[position], str(position)+'\n'])
-        
+            csv += ','.join([aligned_sequence_MT[int(position)], str(position), positions[position]+'\n'])
         
         # save file
         filename = '-'.join([seqid_WT, seqid_MT, 'mutations']) + '.csv'

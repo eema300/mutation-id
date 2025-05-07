@@ -110,3 +110,21 @@ def get_mutation_types(sequence_1, sequence_2):
             mutation_types['substitution'] += 1
 
     return mutation_types
+
+
+def loc_mutation_types(sequence_1, sequence_2):
+    n = len(sequence_1)
+    m = len(sequence_2)
+    shortest_sequence_length = n if n <= m else m
+
+    mutations = {}
+
+    for i in range(shortest_sequence_length):
+        if sequence_1[i] == '-':
+            mutations[i] = 'insertion'
+        elif sequence_1[i] != sequence_2[i] and sequence_2[i] == '-':
+            mutations[i] = 'deletion'
+        elif sequence_1[i] != sequence_2[i] and sequence_2[i] != '-':
+            mutations[i] = 'substitution'
+
+    return mutations
