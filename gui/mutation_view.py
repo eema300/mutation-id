@@ -4,9 +4,8 @@ from .side_panel import SidePanel
 from .view_area import ViewArea
 from .sequence_design import SequenceDesign
 from .view_caller import reset, go_back_to_view
-from logic import export_png, export_csv, export_png_all_graphs
+from logic import export_png, export_csv, export_png_all_graphs, export_png_mutation
 from .stat_sum_area import StatSummary
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 
 class MutationView(QWidget):
     def __init__(self, main_window,
@@ -49,7 +48,7 @@ class MutationView(QWidget):
         # exporting buttons
         export_png_button = QPushButton('Export Mutations As PNG')
         export_png_button.setToolTip("Export mutation-highlighted sequences as a PNG")
-        export_png_button.clicked.connect(lambda: export_png(main_window, self.sequence_design.scene,
+        export_png_button.clicked.connect(lambda: export_png_mutation(main_window, self.sequence_design.scene,
                                                              seqid_1, seqid_2))
         self.side_panel.side_panel_layout.addWidget(export_png_button)
         export_csv_button = QPushButton('Export Mutations As CSV')
